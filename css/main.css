@@ -1,0 +1,35 @@
+/* Basic placeholder styles for a clean look */
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 0;
+  color: #222;
+}
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 32px;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.quote {
+  font-size: 1.2em;
+  margin-bottom: 16px;
+  padding: 16px;
+  border-left: 4px solid #4a90e2;
+  background: #f0f4fa;
+  border-radius: 6px;
+  transition: box-shadow 0.3s;
+}
+.author {
+  display: block;
+  text-align: right;
+  font-style: italic;
+  color: #4a90e2;
+}
