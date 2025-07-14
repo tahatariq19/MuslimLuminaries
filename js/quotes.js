@@ -17,3 +17,4 @@ const quotes = [
     author: "Ibn Taymiyyah"
   }
 ];
+window.quotes = quotes;

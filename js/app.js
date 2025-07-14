@@ -1,13 +1,20 @@
-// Render quotes from quotes.js into the page
+// Show one quote at a time and cycle on click
 window.addEventListener('DOMContentLoaded', () => {
   const quotesList = document.getElementById('quotes-list');
   if (!quotesList || !window.quotes) return;
-  quotes.forEach(q => {
-    const quoteDiv = document.createElement('div');
-    quoteDiv.className = 'quote';
-    quoteDiv.innerHTML = `<span>${q.text}</span><span class="author">- ${q.author}</span>`;
-    quotesList.appendChild(quoteDiv);
-  });
-  // Placeholder: call animation function here if needed
-  if (typeof animateQuotes === 'function') animateQuotes();
+
+  let currentIndex = 0;
+
+  function showQuote(index) {
+    const q = quotes[index];
+    quotesList.innerHTML = `<div class='quote' id='quote-box'><span>${q.text}</span><span class='author'>- ${q.author}</span></div>`;
+    if (typeof animateQuotes === 'function') animateQuotes();
+  }
+
+  showQuote(currentIndex);
+
+  quotesList.onclick = function () {
+    currentIndex = (currentIndex + 1) % quotes.length;
+    showQuote(currentIndex);
+  };
 });
