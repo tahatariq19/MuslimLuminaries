@@ -8,7 +8,6 @@ window.addEventListener('DOMContentLoaded', () => {
   function showQuote(index) {
     const q = quotes[index];
     quotesList.innerHTML = `<div class='quote' id='quote-box'><span>${q.text}</span><span class='author'>- ${q.author}</span></div>`;
-    if (typeof animateQuotes === 'function') animateQuotes();
   }
 
   showQuote(currentIndex);

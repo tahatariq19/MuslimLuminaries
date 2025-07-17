@@ -17,11 +17,11 @@ body {
 .container {
   max-width: 700px;
   margin: 60px auto;
-  background: rgba(255,255,255,0.15);
-  border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  padding: 48px;
-  backdrop-filter: blur(8px);
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  backdrop-filter: none;
 }
 
 h1 {
@@ -32,26 +32,25 @@ h1 {
 }
 
 .quote {
-  font-size: 1.5em;
-  margin-bottom: 24px;
-  padding: 32px 24px;
-  border-left: 6px solid #4a90e2;
-  background: rgba(255,255,255,0.7);
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(74,144,226,0.12);
+  font-size: 2em;
+  margin: 60px auto 0 auto;
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
   position: relative;
-  animation: floatQuote 2.5s ease-in-out infinite alternate;
-}
-@keyframes floatQuote {
-  0% { transform: translateY(0px); }
-  100% { transform: translateY(-16px); }
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 2px 16px rgba(74,144,226,0.25), 0 1px 4px rgba(0,0,0,0.18);
 }
 
 .author {
   display: block;
-  text-align: right;
+  text-align: center;
   font-style: italic;
-  color: #4a90e2;
-  margin-top: 18px;
+  color: #e2a04a;
+  margin-top: 24px;
+  font-size: 1.1em;
   text-shadow: 0 1px 4px rgba(74,144,226,0.12);
 }
