@@ -1,35 +1,57 @@
-/* Basic placeholder styles for a clean look */
+/* Animated gradient background */
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
-  background: #f7f7f7;
+  background: linear-gradient(-45deg, #4a90e2, #50e3c2, #f7f7f7, #e2a04a);
+  background-size: 400% 400%;
+  animation: gradientBG 12s ease infinite;
   margin: 0;
   padding: 0;
   color: #222;
 }
+@keyframes gradientBG {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
 .container {
   max-width: 700px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  padding: 32px;
+  margin: 60px auto;
+  background: rgba(255,255,255,0.15);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  padding: 48px;
+  backdrop-filter: blur(8px);
 }
+
 h1 {
   text-align: center;
   margin-bottom: 32px;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+
 .quote {
-  font-size: 1.2em;
-  margin-bottom: 16px;
-  padding: 16px;
-  border-left: 4px solid #4a90e2;
-  background: #f0f4fa;
-  border-radius: 6px;
-  transition: box-shadow 0.3s;
+  font-size: 1.5em;
+  margin-bottom: 24px;
+  padding: 32px 24px;
+  border-left: 6px solid #4a90e2;
+  background: rgba(255,255,255,0.7);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(74,144,226,0.12);
+  position: relative;
+  animation: floatQuote 2.5s ease-in-out infinite alternate;
 }
+@keyframes floatQuote {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-16px); }
+}
+
 .author {
   display: block;
   text-align: right;
   font-style: italic;
   color: #4a90e2;
+  margin-top: 18px;
+  text-shadow: 0 1px 4px rgba(74,144,226,0.12);
 }
