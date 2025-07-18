@@ -38,16 +38,24 @@ h1 {
 .quote {
   font-size: 2em;
   margin: 0 auto;
-  padding: 0;
+  padding: 0.5em 0.7em;
   border: none;
   background: none;
-  border-radius: 0;
+  border-radius: 0.5em;
   box-shadow: none;
   position: relative;
   color: #fff;
   text-align: center;
   text-shadow: 0 2px 16px rgba(74,144,226,0.25), 0 1px 4px rgba(0,0,0,0.18);
   max-width: 700px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.quote:hover {
+  background: rgba(255,255,255,0.13);
+  color: #4a90e2;
+  box-shadow: 0 2px 16px rgba(74,144,226,0.18);
 }
 
 .author {
