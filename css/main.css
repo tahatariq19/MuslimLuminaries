@@ -56,20 +56,20 @@ h1 {
 }
 
 .quote-leave {
-  animation: quoteFadeOut 0.4s forwards;
+  animation: quoteFadeOut 0.41s forwards;
 }
 
 .quote-enter {
-  animation: quoteFadeIn 0.4s forwards;
+  animation: quoteFadeIn 0.41s forwards;
 }
 
 @keyframes quoteFadeOut {
   0% { opacity: 1; transform: translateZ(0) scale(1); }
-  100% { opacity: 0; transform: translateZ(-60px) scale(0.95); }
+  100% { opacity: 0; transform: translateZ(-3.5px) scale(0.99625); }
 }
 
 @keyframes quoteFadeIn {
-  0% { opacity: 0; transform: translateZ(-60px) scale(0.95); }
+  0% { opacity: 0; transform: translateZ(-3.5px) scale(0.99625); }
   100% { opacity: 1; transform: translateZ(0) scale(1); }
 }
 
