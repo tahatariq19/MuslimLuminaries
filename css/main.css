@@ -80,3 +80,28 @@ h1 {
   font-size: 1.1em;
   text-shadow: 0 1px 4px rgba(74,144,226,0.12);
 }
+
+#bg-toggle {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: none;
+  color: #4a90e2;
+  border: none;
+  border-radius: 18px;
+  padding: 8px 18px;
+  font-size: 1em;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  z-index: 10;
+  outline: none;
+}
+#bg-toggle:hover, #bg-toggle:focus {
+  background: rgba(255,255,255,0.18);
+  color: #222;
+  border: 1.5px solid #4a90e2;
+  box-shadow: 0 2px 12px rgba(74,144,226,0.10);
+  outline: none;
+}
