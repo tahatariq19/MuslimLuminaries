@@ -36,12 +36,19 @@ window.addEventListener('DOMContentLoaded', () => {
 
   showQuote(currentIndex);
 
-  // Background switcher
-  const bgButtons = document.querySelectorAll('.bg-switcher button');
-  bgButtons.forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.body.classList.remove('bg-wavy-gradient'); // Add more as you add backgrounds
-      document.body.classList.add(this.dataset.bg);
-    });
-  });
+  // Multi-background toggle logic
+  // List of available backgrounds (add more as you create them)
+  const backgrounds = ['bg-wavy-gradient'];
+  let currentBg = 0;
+
+  const bgToggle = document.getElementById('bg-toggle');
+  if (bgToggle) {
+    bgToggle.onclick = function() {
+      // Remove current background class
+      document.body.classList.remove(backgrounds[currentBg]);
+      // Cycle to next background
+      currentBg = (currentBg + 1) % backgrounds.length;
+      document.body.classList.add(backgrounds[currentBg]);
+    };
+  }
 });
