@@ -35,4 +35,13 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   showQuote(currentIndex);
+
+  // Background switcher
+  const bgButtons = document.querySelectorAll('.bg-switcher button');
+  bgButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.body.classList.remove('bg-wavy-gradient'); // Add more as you add backgrounds
+      document.body.classList.add(this.dataset.bg);
+    });
+  });
 });
