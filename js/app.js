@@ -49,6 +49,7 @@ window.addEventListener('DOMContentLoaded', () => {
       // Cycle to next background
       currentBg = (currentBg + 1) % backgrounds.length;
       document.body.classList.add(backgrounds[currentBg]);
+      this.blur(); // Remove focus highlight after click
     };
   }
 });
