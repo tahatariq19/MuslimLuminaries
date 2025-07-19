@@ -1,18 +1,9 @@
-/* Animated gradient background */
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(-45deg, #4a90e2, #50e3c2, #f7f7f7, #e2a04a);
-  background-size: 400% 400%;
-  animation: gradientBG 12s ease infinite;
   margin: 0;
   padding: 0;
   color: #222;
   min-height: 100vh;
-}
-@keyframes gradientBG {
-  0% {background-position: 0% 50%;}
-  50% {background-position: 100% 50%;}
-  100% {background-position: 0% 50%;}
 }
 
 .container {

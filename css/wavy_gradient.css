@@ -1,0 +1,11 @@
+/* Wavy Gradient Background */
+.bg-wavy-gradient {
+  background: linear-gradient(-45deg, #4a90e2, #50e3c2, #f7f7f7, #e2a04a);
+  background-size: 400% 400%;
+  animation: wavy_gradient_anim 12s ease infinite;
+}
+@keyframes wavy_gradient_anim {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
