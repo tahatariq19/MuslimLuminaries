@@ -38,18 +38,27 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Multi-background toggle logic
   // List of available backgrounds (add more as you create them)
-  const backgrounds = ['bg-wavy-gradient'];
+  const backgrounds = ['bg-wavy-gradient', 'bg-cosmic-particles'];
   let currentBg = 0;
 
   const bgToggle = document.getElementById('bg-toggle');
   if (bgToggle) {
     bgToggle.onclick = function() {
-      // Remove current background class
       document.body.classList.remove(backgrounds[currentBg]);
-      // Cycle to next background
+      if (backgrounds[currentBg] === 'bg-cosmic-particles' && typeof removeCosmicParticles === 'function') {
+        removeCosmicParticles();
+      }
       currentBg = (currentBg + 1) % backgrounds.length;
       document.body.classList.add(backgrounds[currentBg]);
+      if (backgrounds[currentBg] === 'bg-cosmic-particles' && typeof createCosmicParticles === 'function') {
+        createCosmicParticles();
+      }
       this.blur(); // Remove focus highlight after click
     };
+  }
+
+  // If page loads with cosmic particles, create them
+  if (document.body.classList.contains('bg-cosmic-particles') && typeof createCosmicParticles === 'function') {
+    createCosmicParticles();
   }
 });
