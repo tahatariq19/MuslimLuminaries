@@ -10,6 +10,7 @@ function createNebulaParticles() {
     '#ffb3ec', // pink
     '#b5ffd9'  // teal
   ];
+  const duration = 14; // seconds, must match CSS
   for (let i = 0; i < 52; i++) {
     const s = document.createElement('div');
     s.className = 'nebula-star';
@@ -19,13 +20,21 @@ function createNebulaParticles() {
     const size = Math.random() * 7 + 2;
     s.style.width = s.style.height = `${size}px`;
     s.style.left = `${Math.random() * 100}%`;
-    s.style.top = `-${Math.random() * 20 + 5}px`;
+    s.style.top = `${Math.random() * 100}%`;
     s.style.background = colors[Math.floor(Math.random() * colors.length)];
     s.style.opacity = (Math.random() * 0.5 + 0.4).toFixed(2);
-    s.style.animationDelay = `${Math.random() * 14}s`;
+    // Give each particle a negative animation delay so it appears mid-animation
+    const animDelay = -Math.random() * duration;
+    s.style.animationDelay = `${animDelay}s`;
     if (s.classList.contains('twinkle')) {
-      s.style.animationDelay += "," + (Math.random() * 2).toFixed(2) + "s";
+      s.style.animationDelay += "," + (-Math.random() * 2).toFixed(2) + "s";
     }
+    // Assign random direction and distance
+    const angle = Math.random() * 2 * Math.PI;
+    const deg = (angle * 180 / Math.PI).toFixed(2);
+    const distance = (80 + Math.random() * 60).toFixed(2) + 'vh';
+    s.style.setProperty('--angle', deg + 'deg');
+    s.style.setProperty('--distance', distance);
     document.body.appendChild(s);
   }
 }
