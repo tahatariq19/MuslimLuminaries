@@ -38,7 +38,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Multi-background toggle logic
   // List of available backgrounds (add more as you create them)
-  const backgrounds = ['bg-wavy-gradient', 'bg-cosmic-particles'];
+  const backgrounds = ['bg-wavy-gradient', 'bg-cosmic-particles', 'bg-nebula-particles'];
   let currentBg = 0;
 
   const bgToggle = document.getElementById('bg-toggle');
@@ -48,10 +48,16 @@ window.addEventListener('DOMContentLoaded', () => {
       if (backgrounds[currentBg] === 'bg-cosmic-particles' && typeof removeCosmicParticles === 'function') {
         removeCosmicParticles();
       }
+      if (backgrounds[currentBg] === 'bg-nebula-particles' && typeof removeNebulaParticles === 'function') {
+        removeNebulaParticles();
+      }
       currentBg = (currentBg + 1) % backgrounds.length;
       document.body.classList.add(backgrounds[currentBg]);
       if (backgrounds[currentBg] === 'bg-cosmic-particles' && typeof createCosmicParticles === 'function') {
         createCosmicParticles();
+      }
+      if (backgrounds[currentBg] === 'bg-nebula-particles' && typeof createNebulaParticles === 'function') {
+        createNebulaParticles();
       }
       this.blur(); // Remove focus highlight after click
     };
@@ -60,5 +66,9 @@ window.addEventListener('DOMContentLoaded', () => {
   // If page loads with cosmic particles, create them
   if (document.body.classList.contains('bg-cosmic-particles') && typeof createCosmicParticles === 'function') {
     createCosmicParticles();
+  }
+  // If page loads with nebula particles, create them
+  if (document.body.classList.contains('bg-nebula-particles') && typeof createNebulaParticles === 'function') {
+    createNebulaParticles();
   }
 });
