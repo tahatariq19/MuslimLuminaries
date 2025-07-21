@@ -1,17 +1,43 @@
-/* Cosmic Particles Background */
+/* Cosmic Night Sky Background */
 .bg-cosmic-particles {
-  background: radial-gradient(ellipse at 60% 40%, #232946 0%, #1a1a2e 100%);
+  background: linear-gradient(to bottom, #0a1633 0%, #1a2746 60%, #0b0c1a 100%);
   overflow: hidden;
+  position: relative;
+}
+.bg-cosmic-particles::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 50% 80%, rgba(0,180,255,0.10) 0%, rgba(0,0,0,0.0) 60%),
+    radial-gradient(ellipse at 50% 0%, rgba(120,80,255,0.08) 0%, rgba(0,0,0,0.0) 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.35) 80%, rgba(0,0,0,0.7) 100%);
 }
 .particle {
   position: absolute;
   border-radius: 50%;
   opacity: 0.7;
-  background: #fff;
   pointer-events: none;
-  animation: cosmic-float 10s linear infinite;
+  z-index: 1;
+  animation: cosmic-float 12s linear infinite;
+  filter: blur(0.5px);
+}
+.particle.glow {
+  filter: blur(2.5px);
+  opacity: 0.5;
+}
+.particle.twinkle {
+  animation: cosmic-float 12s linear infinite, twinkle 2.2s ease-in-out infinite;
 }
 @keyframes cosmic-float {
   0% { transform: translateY(100vh) scale(0.7); opacity: 0.7; }
   100% { transform: translateY(-10vh) scale(1.2); opacity: 0.2; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.7; filter: brightness(1); }
+  20% { opacity: 1; filter: brightness(1.5); }
+  50% { opacity: 0.4; filter: brightness(0.7); }
+  70% { opacity: 1; filter: brightness(1.3); }
 }
