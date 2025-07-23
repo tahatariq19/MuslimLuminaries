@@ -28,20 +28,24 @@ h1 {
 }
 
 .quote {
-  font-size: 2em;
+  font-size: 2.4em;
   margin: 0 auto;
-  padding: 0.5em 0.7em;
+  padding: 0.8em 1.2em;
   border: none;
   background: none;
   border-radius: 0.5em;
   box-shadow: none;
   position: relative;
   color: #fff;
-  text-align: center;
+  text-align: left;
   text-shadow: 0 2px 16px #4a90e2, 0 0px 2px #fff, 0 1px 8px #bfaaff, 0 0 2px #000;
-  max-width: 700px;
+  max-width: 900px;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
   /* Animation state */
   opacity: 1;
   transform: translateZ(0) scale(1);
@@ -72,12 +76,14 @@ h1 {
 
 .author {
   display: block;
-  text-align: center;
+  text-align: right;
   font-style: italic;
   color: #ffe6a0;
-  margin-top: 24px;
+  margin-top: 32px;
+  margin-right: 18px;
   font-size: 1.1em;
   text-shadow: 0 1px 8px #4a90e2, 0 0 2px #fff, 0 0 2px #000;
+  align-self: flex-end;
 }
 
 #bg-toggle {
@@ -89,7 +95,7 @@ h1 {
   transform: none;
   background: none;
   color: #fff;
-  font-size: 1.1em;
+  font-size: 1.5em;
   font-family: inherit;
   padding: 0.5em 1.2em;
   border: none;
