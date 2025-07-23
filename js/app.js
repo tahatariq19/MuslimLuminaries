@@ -5,9 +5,47 @@ window.addEventListener('DOMContentLoaded', () => {
 
   let currentIndex = 0;
   let animating = false;
+  let shuffledQuotes = [];
+  let shownIndices = [];
+  let lastAuthor = null;
+
+  function shuffleQuotes() {
+    // Fisher-Yates shuffle
+    const arr = quotes.map((q, i) => i);
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function pickRandomStart() {
+    shuffledQuotes = shuffleQuotes();
+    shownIndices = [];
+    currentIndex = 0;
+    lastAuthor = null;
+    // Pick a random index to start
+    const randIdx = Math.floor(Math.random() * shuffledQuotes.length);
+    // Move the random index to the front
+    [shuffledQuotes[0], shuffledQuotes[randIdx]] = [shuffledQuotes[randIdx], shuffledQuotes[0]];
+  }
+
+  function getNextQuoteIndex() {
+    // Try to find the next quote with a different author
+    for (let offset = 1; offset <= shuffledQuotes.length; offset++) {
+      const idx = (currentIndex + offset) % shuffledQuotes.length;
+      const quoteIdx = shuffledQuotes[idx];
+      if (!shownIndices.includes(quoteIdx) && quotes[quoteIdx].author !== lastAuthor) {
+        return idx;
+      }
+    }
+    // If not found (should only happen at end), reshuffle
+    return null;
+  }
 
   function showQuote(index, animate = false) {
-    const q = quotes[index];
+    const quoteIdx = shuffledQuotes[index];
+    const q = quotes[quoteIdx];
     quotesList.innerHTML = `<div class='quote' id='quote-box'><span>${q.text}</span><span class='author'>~ ${q.author}</span></div>`;
     const quoteBox = document.getElementById('quote-box');
     if (quoteBox) {
@@ -17,7 +55,21 @@ window.addEventListener('DOMContentLoaded', () => {
         quoteBox.classList.add('quote-leave');
         quoteBox.addEventListener('animationend', function handleOut() {
           quoteBox.removeEventListener('animationend', handleOut);
-          currentIndex = (currentIndex + 1) % quotes.length;
+          // Mark this quote as shown
+          shownIndices.push(shuffledQuotes[currentIndex]);
+          lastAuthor = quotes[shuffledQuotes[currentIndex]].author;
+          // If all quotes shown, reshuffle and start new cycle
+          if (shownIndices.length >= quotes.length) {
+            pickRandomStart();
+          } else {
+            // Find next valid quote
+            let nextIdx = getNextQuoteIndex();
+            if (nextIdx === null) {
+              pickRandomStart();
+              nextIdx = 0;
+            }
+            currentIndex = nextIdx;
+          }
           // Replace with new quote and animate in
           showQuote(currentIndex, true);
         });
@@ -34,6 +86,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Initialize
+  pickRandomStart();
   showQuote(currentIndex);
 
   // Multi-background toggle logic
