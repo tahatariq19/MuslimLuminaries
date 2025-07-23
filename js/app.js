@@ -38,7 +38,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Multi-background toggle logic
   // List of available backgrounds (add more as you create them)
-  const backgrounds = ['bg-wavy-gradient', 'bg-cosmic-particles', 'bg-nebula-particles'];
+  const backgrounds = ['bg-nebula-particles', 'bg-wavy-gradient', 'bg-cosmic-particles'];
   let currentBg = 0;
 
   const bgToggle = document.getElementById('bg-toggle');
