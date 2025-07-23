@@ -38,7 +38,7 @@ h1 {
   position: relative;
   color: #fff;
   text-align: center;
-  text-shadow: 0 2px 16px rgba(74,144,226,0.25), 0 1px 4px rgba(0,0,0,0.18);
+  text-shadow: 0 2px 16px #4a90e2, 0 0px 2px #fff, 0 1px 8px #bfaaff, 0 0 2px #000;
   max-width: 700px;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, box-shadow 0.2s;
@@ -75,33 +75,33 @@ h1 {
   display: block;
   text-align: center;
   font-style: italic;
-  color: #e2a04a;
+  color: #ffe6a0;
   margin-top: 24px;
   font-size: 1.1em;
-  text-shadow: 0 1px 4px rgba(74,144,226,0.12);
+  text-shadow: 0 1px 8px #4a90e2, 0 0 2px #fff, 0 0 2px #000;
 }
 
 #bg-toggle {
   position: absolute;
   top: 18px;
   left: 18px;
-  background: none;
+  background: rgba(255,255,255,0.18);
   color: #4a90e2;
-  border: none;
+  border: 1.5px solid #4a90e2;
   border-radius: 18px;
   padding: 8px 18px;
   font-size: 1em;
   font-family: inherit;
   cursor: pointer;
-  box-shadow: none;
+  box-shadow: 0 2px 12px rgba(74,144,226,0.10);
   transition: background 0.2s, color 0.2s, border 0.2s;
   z-index: 10;
   outline: none;
 }
 #bg-toggle:hover, #bg-toggle:focus {
-  background: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.28);
   color: #222;
-  border: 1.5px solid #4a90e2;
-  box-shadow: 0 2px 12px rgba(74,144,226,0.10);
+  border: 1.5px solid #bfaaff;
+  box-shadow: 0 2px 16px #bfaaff;
   outline: none;
 }
