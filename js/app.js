@@ -72,3 +72,5 @@ window.addEventListener('DOMContentLoaded', () => {
     createNebulaParticles();
   }
 });
+
+// No code change needed; #bg-toggle event binding works for both <button> and <span>.
