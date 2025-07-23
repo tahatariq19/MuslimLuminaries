@@ -8,7 +8,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function showQuote(index, animate = false) {
     const q = quotes[index];
-    quotesList.innerHTML = `<div class='quote' id='quote-box'><span>${q.text}</span><span class='author'>- ${q.author}</span></div>`;
+    quotesList.innerHTML = `<div class='quote' id='quote-box'><span>${q.text}</span><span class='author'>~ ${q.author}</span></div>`;
     const quoteBox = document.getElementById('quote-box');
     if (quoteBox) {
       quoteBox.onclick = function () {
