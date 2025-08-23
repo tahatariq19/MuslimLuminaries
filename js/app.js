@@ -39,7 +39,15 @@ window.addEventListener('DOMContentLoaded', () => {
         return idx;
       }
     }
-    // If not found (should only happen at end), reshuffle
+    // If not found, try to find any unshown quote (to ensure all are displayed before reshuffling)
+    for (let offset = 1; offset <= shuffledQuotes.length; offset++) {
+      const idx = (currentIndex + offset) % shuffledQuotes.length;
+      const quoteIdx = shuffledQuotes[idx];
+      if (!shownIndices.includes(quoteIdx)) {
+        return idx;
+      }
+    }
+    // If still not found (all quotes have been shown), reshuffle
     return null;
   }
 
@@ -126,5 +134,3 @@ window.addEventListener('DOMContentLoaded', () => {
     createNebulaParticles();
   }
 });
-
-// No code change needed; #bg-toggle event binding works for both <button> and <span>.
