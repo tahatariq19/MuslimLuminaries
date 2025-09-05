@@ -116,3 +116,53 @@ h1 {
   color: #fff;
   outline: none;
 }
+
+/* Accessibility & theme overrides (appended) */
+:root{
+  --text-color: #fff;
+  --accent: #4a90e2;
+  --focus-ring: rgba(74,144,226,0.35);
+  --muted: #ffe6a0;
+}
+
+/* Ensure small-screen scrolling but prevent overflow for particle backgrounds */
+html, body {
+  overflow: hidden;
+}
+
+/* Only allow overflow for non-particle backgrounds */
+.bg-wavy-gradient {
+  overflow: auto;
+}
+
+/* Skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 1000;
+}
+.skip-link:focus {
+  left: 12px;
+  top: 12px;
+  width: auto;
+  height: auto;
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+/* Focus-visible for bg-toggle and quote */
+#bg-toggle:focus-visible,
+.quote:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 4px;
+}
+
+/* Use CSS variables for author color */
+.author { color: var(--muted) !important; }
