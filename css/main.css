@@ -126,9 +126,6 @@ h1 {
 }
 
 /* Ensure small-screen scrolling but prevent overflow for particle backgrounds */
-html, body {
-  overflow: hidden;
-}
 
 /* Only allow overflow for non-particle backgrounds */
 .bg-wavy-gradient {
@@ -164,5 +161,3 @@ html, body {
   outline-offset: 4px;
 }
 
-/* Use CSS variables for author color */
-.author { color: var(--muted) !important; }
