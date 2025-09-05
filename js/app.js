@@ -1,136 +1,188 @@
-// Show one quote at a time and cycle on click with animation
-window.addEventListener('DOMContentLoaded', () => {
-  const quotesList = document.getElementById('quotes-list');
-  if (!quotesList || !window.quotes) return;
+(function () {
+ "use strict";
 
-  let currentIndex = 0;
-  let animating = false;
-  let shuffledQuotes = [];
-  let shownIndices = [];
-  let lastAuthor = null;
+ const quotesList = document.getElementById('quotes-list');
+ if (!quotesList) return;
 
-  function shuffleQuotes() {
-    // Fisher-Yates shuffle
-    const arr = quotes.map((q, i) => i);
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
+ // Read quotes from window (legacy loading), then remove global
+ const QUOTES = (window.quotes && Array.isArray(window.quotes)) ? window.quotes.slice() : [];
+ try { delete window.quotes; } catch (e) { /* ignore */ }
 
-  function pickRandomStart() {
-    shuffledQuotes = shuffleQuotes();
-    shownIndices = [];
-    currentIndex = 0;
-    lastAuthor = null;
-    // Pick a random index to start
-    const randIdx = Math.floor(Math.random() * shuffledQuotes.length);
-    // Move the random index to the front
-    [shuffledQuotes[0], shuffledQuotes[randIdx]] = [shuffledQuotes[randIdx], shuffledQuotes[0]];
-  }
+ // Shuffle state
+ let currentIndex = 0;
+ let animating = false;
+ let shuffledQuotes = [];
+ let shownIndices = [];
+ let lastAuthor = null;
 
-  function getNextQuoteIndex() {
-    // Try to find the next quote with a different author
-    for (let offset = 1; offset <= shuffledQuotes.length; offset++) {
-      const idx = (currentIndex + offset) % shuffledQuotes.length;
-      const quoteIdx = shuffledQuotes[idx];
-      if (!shownIndices.includes(quoteIdx) && quotes[quoteIdx].author !== lastAuthor) {
-        return idx;
-      }
-    }
-    // If not found, try to find any unshown quote (to ensure all are displayed before reshuffling)
-    for (let offset = 1; offset <= shuffledQuotes.length; offset++) {
-      const idx = (currentIndex + offset) % shuffledQuotes.length;
-      const quoteIdx = shuffledQuotes[idx];
-      if (!shownIndices.includes(quoteIdx)) {
-        return idx;
-      }
-    }
-    // If still not found (all quotes have been shown), reshuffle
-    return null;
-  }
+ function shuffleQuotes() {
+   const arr = QUOTES.map((q, i) => i);
+   for (let i = arr.length - 1; i > 0; i--) {
+     const j = Math.floor(Math.random() * (i + 1));
+     [arr[i], arr[j]] = [arr[j], arr[i]];
+   }
+   return arr;
+ }
 
-  function showQuote(index, animate = false) {
-    const quoteIdx = shuffledQuotes[index];
-    const q = quotes[quoteIdx];
-    quotesList.innerHTML = `<div class='quote' id='quote-box'><span>${q.text}</span><span class='author'>~ ${q.author}</span></div>`;
-    const quoteBox = document.getElementById('quote-box');
-    if (quoteBox) {
-      quoteBox.onclick = function () {
-        if (animating) return;
-        animating = true;
-        quoteBox.classList.add('quote-leave');
-        quoteBox.addEventListener('animationend', function handleOut() {
-          quoteBox.removeEventListener('animationend', handleOut);
-          // Mark this quote as shown
-          shownIndices.push(shuffledQuotes[currentIndex]);
-          lastAuthor = quotes[shuffledQuotes[currentIndex]].author;
-          // If all quotes shown, reshuffle and start new cycle
-          if (shownIndices.length >= quotes.length) {
-            pickRandomStart();
-          } else {
-            // Find next valid quote
-            let nextIdx = getNextQuoteIndex();
-            if (nextIdx === null) {
-              pickRandomStart();
-              nextIdx = 0;
-            }
-            currentIndex = nextIdx;
-          }
-          // Replace with new quote and animate in
-          showQuote(currentIndex, true);
-        });
-      };
-      if (animate) {
-        quoteBox.classList.add('quote-enter');
-        quoteBox.addEventListener('animationend', function handleIn() {
-          quoteBox.classList.remove('quote-enter');
-          animating = false;
-        }, { once: true });
-      } else {
-        animating = false;
-      }
-    }
-  }
+ function pickRandomStart() {
+   shuffledQuotes = shuffleQuotes();
+   shownIndices = [];
+   currentIndex = 0;
+   lastAuthor = null;
+   if (shuffledQuotes.length > 1) {
+     const randIdx = Math.floor(Math.random() * shuffledQuotes.length);
+     [shuffledQuotes[0], shuffledQuotes[randIdx]] = [shuffledQuotes[randIdx], shuffledQuotes[0]];
+   }
+ }
 
-  // Initialize
-  pickRandomStart();
-  showQuote(currentIndex);
+ function getNextQuoteIndex() {
+   for (let offset = 1; offset <= shuffledQuotes.length; offset++) {
+     const idx = (currentIndex + offset) % shuffledQuotes.length;
+     const quoteIdx = shuffledQuotes[idx];
+     if (!shownIndices.includes(quoteIdx) && QUOTES[quoteIdx].author !== lastAuthor) {
+       return idx;
+     }
+   }
+   for (let offset = 1; offset <= shuffledQuotes.length; offset++) {
+     const idx = (currentIndex + offset) % shuffledQuotes.length;
+     const quoteIdx = shuffledQuotes[idx];
+     if (!shownIndices.includes(quoteIdx)) return idx;
+   }
+   return null;
+ }
 
-  // Multi-background toggle logic
-  // List of available backgrounds (add more as you create them)
-  const backgrounds = ['bg-nebula-particles', 'bg-wavy-gradient', 'bg-cosmic-particles'];
-  let currentBg = 0;
+ function buildQuoteElement(qObj) {
+   const btn = document.createElement('button');
+   btn.type = 'button';
+   btn.className = 'quote';
+   btn.setAttribute('aria-live', 'polite');
+   // Quote text
+   const spanText = document.createElement('span');
+   spanText.textContent = qObj.text;
+   btn.appendChild(spanText);
+   // Author
+   const spanAuthor = document.createElement('span');
+   spanAuthor.className = 'author';
+   spanAuthor.textContent = `~ ${qObj.author}`;
+   btn.appendChild(spanAuthor);
+   return btn;
+ }
 
-  const bgToggle = document.getElementById('bg-toggle');
-  if (bgToggle) {
-    bgToggle.onclick = function() {
-      document.body.classList.remove(backgrounds[currentBg]);
-      if (backgrounds[currentBg] === 'bg-cosmic-particles' && typeof removeCosmicParticles === 'function') {
-        removeCosmicParticles();
-      }
-      if (backgrounds[currentBg] === 'bg-nebula-particles' && typeof removeNebulaParticles === 'function') {
-        removeNebulaParticles();
-      }
-      currentBg = (currentBg + 1) % backgrounds.length;
-      document.body.classList.add(backgrounds[currentBg]);
-      if (backgrounds[currentBg] === 'bg-cosmic-particles' && typeof createCosmicParticles === 'function') {
-        createCosmicParticles();
-      }
-      if (backgrounds[currentBg] === 'bg-nebula-particles' && typeof createNebulaParticles === 'function') {
-        createNebulaParticles();
-      }
-      this.blur(); // Remove focus highlight after click
-    };
-  }
+ function showQuote(index, animate = false) {
+   const quoteIdx = shuffledQuotes[index];
+   const q = QUOTES[quoteIdx];
+   // Clear container and append accessible button
+   quotesList.innerHTML = '';
+   const quoteEl = buildQuoteElement(q);
+   quoteEl.id = 'quote-box';
 
-  // If page loads with cosmic particles, create them
-  if (document.body.classList.contains('bg-cosmic-particles') && typeof createCosmicParticles === 'function') {
-    createCosmicParticles();
-  }
-  // If page loads with nebula particles, create them
-  if (document.body.classList.contains('bg-nebula-particles') && typeof createNebulaParticles === 'function') {
-    createNebulaParticles();
-  }
-});
+   // Click / keyboard activation handler
+   quoteEl.addEventListener('click', triggerNext);
+   quoteEl.addEventListener('keydown', (ev) => {
+     if (ev.key === 'Enter' || ev.key === ' ') {
+       ev.preventDefault();
+       triggerNext();
+     }
+   });
+
+   if (animate) quoteEl.classList.add('quote-enter');
+   quoteEl.addEventListener('animationend', function handleIn() {
+     quoteEl.classList.remove('quote-enter');
+     animating = false;
+     quoteEl.removeEventListener('animationend', handleIn);
+   }, { once: true });
+
+   quotesList.appendChild(quoteEl);
+   if (!animate) animating = false;
+ }
+
+ function triggerNext() {
+   if (animating) return;
+   const quoteBox = document.getElementById('quote-box');
+   if (!quoteBox) return;
+   animating = true;
+   quoteBox.classList.add('quote-leave');
+   quoteBox.addEventListener('animationend', function handleOut() {
+     quoteBox.removeEventListener('animationend', handleOut);
+     // Mark shown
+     shownIndices.push(shuffledQuotes[currentIndex]);
+     lastAuthor = QUOTES[shuffledQuotes[currentIndex]].author;
+     if (shownIndices.length >= QUOTES.length) {
+       pickRandomStart();
+     } else {
+       let nextIdx = getNextQuoteIndex();
+       if (nextIdx === null) {
+         pickRandomStart();
+         nextIdx = 0;
+       }
+       currentIndex = nextIdx;
+     }
+     showQuote(currentIndex, true);
+   });
+ }
+
+ // Initialize quotes
+ pickRandomStart();
+ showQuote(currentIndex);
+
+ // Background/theme handling with persistence
+ const BG_KEY = 'ml:bg';
+ const backgrounds = ['bg-nebula-particles', 'bg-wavy-gradient', 'bg-cosmic-particles'];
+ let currentBg = 0;
+
+ // Restore saved background (if valid)
+ try {
+   const saved = localStorage.getItem(BG_KEY);
+   if (saved) {
+     const idx = backgrounds.indexOf(saved);
+     if (idx !== -1) currentBg = idx;
+   }
+ } catch (e) { /* localStorage may be unavailable */ }
+
+ function applyBackground(idx) {
+   backgrounds.forEach((c) => document.body.classList.remove(c));
+   document.body.classList.add(backgrounds[idx]);
+   // Particle lifecycle hooks (if provided by separate scripts)
+   if (backgrounds[idx] === 'bg-cosmic-particles' && typeof createCosmicParticles === 'function') {
+     createCosmicParticles();
+   } else if (typeof removeCosmicParticles === 'function') {
+     removeCosmicParticles();
+   }
+   if (backgrounds[idx] === 'bg-nebula-particles' && typeof createNebulaParticles === 'function') {
+     createNebulaParticles();
+   } else if (typeof removeNebulaParticles === 'function') {
+     removeNebulaParticles();
+   }
+   // Persist
+   try { localStorage.setItem(BG_KEY, backgrounds[idx]); } catch (e) { /* ignore */ }
+ }
+
+ // Initial apply - ensure DOM is ready for particle creation
+ setTimeout(() => {
+   applyBackground(currentBg);
+ }, 0); // Defer to next tick to ensure DOM is ready
+
+ const bgToggle = document.getElementById('bg-toggle');
+ if (bgToggle) {
+   function handleToggle() {
+     const prev = currentBg;
+     currentBg = (currentBg + 1) % backgrounds.length;
+     applyBackground(currentBg);
+     bgToggle.setAttribute('aria-pressed', String(currentBg !== 0));
+     bgToggle.blur();
+   }
+   bgToggle.addEventListener('click', handleToggle);
+   // keyboard: allow T to toggle as a shortcut
+   document.addEventListener('keydown', (ev) => {
+     if ((ev.key === 't' || ev.key === 'T') && (ev.target === document.body || ev.target === document.documentElement)) {
+       handleToggle();
+     }
+   });
+ }
+
+ // Expose a small test hook without polluting globals (only in dev)
+ if (typeof window !== 'undefined') {
+   window.__ML_APP = { getState: () => ({ currentBg, currentIndex }) };
+ }
+
+})();
