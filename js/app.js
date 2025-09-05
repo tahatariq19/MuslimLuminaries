@@ -72,7 +72,9 @@
     const quoteIdx = shuffledQuotes[index];
     const q = QUOTES[quoteIdx];
     // Clear container and append accessible button
-    quotesList.innerHTML = '';
+    while (quotesList.firstChild) {
+      quotesList.removeChild(quotesList.firstChild);
+    }
     const quoteEl = buildQuoteElement(q);
     quoteEl.id = 'quote-box';
 
@@ -130,6 +132,45 @@
   const backgrounds = ['bg-nebula-particles', 'bg-wavy-gradient', 'bg-cosmic-particles'];
   let currentBg = 0;
 
+  // Dynamic asset loading
+  const loadedAssets = { css: new Set(), js: new Set() };
+
+  function loadCSS(href) {
+    if (loadedAssets.css.has(href)) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.onload = () => {
+        loadedAssets.css.add(href);
+        resolve();
+      };
+      link.onerror = reject;
+      document.head.appendChild(link);
+    });
+  }
+
+  function loadJS(src) {
+    if (loadedAssets.js.has(src)) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => {
+        loadedAssets.js.add(src);
+        resolve();
+      };
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  function unloadAssets(bgClass) {
+    // Remove CSS if not needed
+    // For simplicity, since CSS is small, we can keep them loaded
+    // But for JS, we can remove scripts if needed, but it's tricky
+    // For now, just keep loaded
+  }
+
   // Restore saved background (if valid)
   try {
     const saved = localStorage.getItem(BG_KEY);
@@ -139,22 +180,41 @@
     }
   } catch (e) { /* localStorage may be unavailable */ }
 
-  function applyBackground(idx) {
-    backgrounds.forEach((c) => document.body.classList.remove(c));
-    document.body.classList.add(backgrounds[idx]);
-    // Particle lifecycle hooks (if provided by separate scripts)
-    if (backgrounds[idx] === 'bg-cosmic-particles' && typeof createCosmicParticles === 'function') {
-      createCosmicParticles();
-    } else if (typeof removeCosmicParticles === 'function') {
-      removeCosmicParticles();
+  async function applyBackground(idx) {
+    const bgClass = backgrounds[idx];
+    const assets = {
+      'bg-nebula-particles': { css: 'css/nebula_particles.css', js: 'js/nebula_particles.js' },
+      'bg-wavy-gradient': { css: 'css/wavy_gradient.css', js: null },
+      'bg-cosmic-particles': { css: 'css/cosmic_particles.css', js: 'js/cosmic_particles.js' }
+    };
+
+    // Load CSS and JS if needed
+    const promises = [];
+    if (assets[bgClass].css) promises.push(loadCSS(assets[bgClass].css));
+    if (assets[bgClass].js) promises.push(loadJS(assets[bgClass].js));
+
+    try {
+      await Promise.all(promises);
+    } catch (e) {
+      console.error('Failed to load assets for', bgClass, e);
     }
-    if (backgrounds[idx] === 'bg-nebula-particles' && typeof createNebulaParticles === 'function') {
-      createNebulaParticles();
-    } else if (typeof removeNebulaParticles === 'function') {
-      removeNebulaParticles();
+
+    backgrounds.forEach((c) => document.body.classList.remove(c));
+    document.body.classList.add(bgClass);
+
+    // Particle lifecycle hooks (using namespace)
+    if (bgClass === 'bg-cosmic-particles' && window.particles && window.particles.cosmic) {
+      window.particles.cosmic.create();
+    } else if (window.particles && window.particles.cosmic) {
+      window.particles.cosmic.remove();
+    }
+    if (bgClass === 'bg-nebula-particles' && window.particles && window.particles.nebula) {
+      window.particles.nebula.create();
+    } else if (window.particles && window.particles.nebula) {
+      window.particles.nebula.remove();
     }
     // Persist
-    try { localStorage.setItem(BG_KEY, backgrounds[idx]); } catch (e) { /* ignore */ }
+    try { localStorage.setItem(BG_KEY, bgClass); } catch (e) { /* ignore */ }
   }
 
   // Initial apply - ensure DOM is ready for particle creation
