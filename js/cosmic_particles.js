@@ -1,7 +1,6 @@
 // Cosmic particles background logic
 function createCosmicParticles() {
   removeCosmicParticles();
-  if (!document.body.classList.contains('bg-cosmic-particles')) return;
   const colors = [
     '#fff', // white
     '#ffe066', // yellow

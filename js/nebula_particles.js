@@ -1,7 +1,6 @@
 // Nebula particles background logic
 function createNebulaParticles() {
   removeNebulaParticles();
-  if (!document.body.classList.contains('bg-nebula-particles')) return;
   const colors = [
     '#fff', // white
     '#ffe066', // yellow
@@ -32,7 +31,7 @@ function createNebulaParticles() {
     // Assign random direction and distance
     const angle = Math.random() * 2 * Math.PI;
     const deg = (angle * 180 / Math.PI).toFixed(2);
-    const distance = (80 + Math.random() * 60).toFixed(2) + 'vh';
+    const distance = (60 + Math.random() * 40).toFixed(2) + 'vh'; // Reduced from (80 + Math.random() * 60)
     s.style.setProperty('--angle', deg + 'deg');
     s.style.setProperty('--distance', distance);
     document.body.appendChild(s);
