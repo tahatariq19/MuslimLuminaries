@@ -1,5 +1,5 @@
 // Cosmic particles background logic
-(function() {
+const createCosmicParticles = (function() {
   const colors = [
     '#fff', // white
     '#ffe066', // yellow
@@ -9,8 +9,8 @@
     '#b5ffd9'  // teal
   ];
 
-  function createCosmicParticles() {
-    removeCosmicParticles();
+  function create() {
+    remove();
     for (let i = 0; i < 44; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
@@ -30,14 +30,12 @@
     }
   }
 
-  function removeCosmicParticles() {
+  function remove() {
     const particles = document.querySelectorAll('.particle');
     for (let i = particles.length - 1; i >= 0; i--) {
       particles[i].remove();
     }
   }
 
-  // Expose to a namespace instead of global
-  window.particles = window.particles || {};
-  window.particles.cosmic = { create: createCosmicParticles, remove: removeCosmicParticles };
+  return { create, remove };
 })();

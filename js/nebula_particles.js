@@ -1,5 +1,5 @@
 // Nebula particles background logic
-(function() {
+const createNebulaParticles = (function() {
   const colors = [
     '#fff', // white
     '#ffe066', // yellow
@@ -10,8 +10,8 @@
   ];
   const duration = 14; // seconds, must match CSS
 
-  function createNebulaParticles() {
-    removeNebulaParticles();
+  function create() {
+    remove();
     for (let i = 0; i < 52; i++) {
       const s = document.createElement('div');
       s.className = 'nebula-star';
@@ -40,14 +40,12 @@
     }
   }
 
-  function removeNebulaParticles() {
+  function remove() {
     const stars = document.querySelectorAll('.nebula-star');
     for (let i = stars.length - 1; i >= 0; i--) {
       stars[i].remove();
     }
   }
 
-  // Expose to a namespace instead of global
-  window.particles = window.particles || {};
-  window.particles.nebula = { create: createNebulaParticles, remove: removeNebulaParticles };
+  return { create, remove };
 })();
