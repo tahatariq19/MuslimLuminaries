@@ -166,7 +166,7 @@
     // Get current assets needed
     const currentAssets = assets[bgClass];
     const neededCSS = currentAssets.css || null;
-    const neededJS = currentAssets.js || null;
+    // JS is never unloaded
 
     // Remove CSS that are not needed for current background
     const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
@@ -178,15 +178,7 @@
       }
     });
 
-    // Remove JS that are not needed for current background
-    const scripts = document.querySelectorAll('script[src]');
-    scripts.forEach(script => {
-      const src = script.getAttribute('src');
-      if (src && src.startsWith('js/') && src !== neededJS && loadedAssets.js.has(src)) {
-        script.remove();
-        loadedAssets.js.delete(src);
-      }
-    });
+    // Do not remove JS scripts - keep functions loaded
   }
 
   // Restore saved background (if valid)
@@ -212,10 +204,9 @@
     // Unload previous assets before loading new ones
     unloadAssets(bgClass);
 
-    // Load CSS and JS if needed
+    // Load only CSS if needed (JS preloaded)
     const promises = [];
     if (assets[bgClass].css) promises.push(loadCSS(assets[bgClass].css));
-    if (assets[bgClass].js) promises.push(loadJS(assets[bgClass].js));
 
     try {
       await Promise.all(promises);
@@ -241,8 +232,18 @@
     try { localStorage.setItem(BG_KEY, bgClass); } catch (e) { /* ignore */ }
   }
 
-  // Initial apply - ensure DOM is ready for particle creation
-  applyBackground(currentBg);
+  // Preload JS files once
+  Promise.all([
+    loadJS('js/nebula_particles.js'),
+    loadJS('js/cosmic_particles.js')
+  ]).then(() => {
+    // Initial apply - ensure DOM is ready for particle creation
+    applyBackground(currentBg);
+  }).catch(e => {
+    console.error('Failed to preload JS', e);
+    // Fallback to initial apply
+    applyBackground(currentBg);
+  });
 
   const bgToggle = document.getElementById('bg-toggle');
   if (bgToggle) {

@@ -11,6 +11,7 @@ const createNebulaParticles = (function() {
   const duration = 14; // seconds, must match CSS
 
   function create() {
+      console.log('Creating nebula particles');
       const container = document.getElementById('background-container');
       if (!container) {
         console.error('Background container not found');
@@ -43,13 +44,17 @@ const createNebulaParticles = (function() {
         s.style.setProperty('--distance', distance);
         container.appendChild(s);
       }
+      console.log('Nebula particles created: 52 stars added');
     }
 
   function remove() {
+    console.log('Removing nebula particles');
     const stars = document.querySelectorAll('.nebula-star');
+    console.log(`Found ${stars.length} nebula stars to remove`);
     for (let i = stars.length - 1; i >= 0; i--) {
       stars[i].remove();
     }
+    console.log('Nebula particles removed');
   }
 
   return { create, remove };

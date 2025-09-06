@@ -10,6 +10,7 @@ const createCosmicParticles = (function() {
   ];
 
   function create() {
+    console.log('Creating cosmic particles');
     remove();
     for (let i = 0; i < 44; i++) {
       const p = document.createElement('div');
@@ -28,13 +29,17 @@ const createCosmicParticles = (function() {
       }
       document.body.appendChild(p);
     }
+    console.log('Cosmic particles created: 44 particles added');
   }
 
   function remove() {
+    console.log('Removing cosmic particles');
     const particles = document.querySelectorAll('.particle');
+    console.log(`Found ${particles.length} cosmic particles to remove`);
     for (let i = particles.length - 1; i >= 0; i--) {
       particles[i].remove();
     }
+    console.log('Cosmic particles removed');
   }
 
   return { create, remove };
