@@ -13,7 +13,6 @@
   let animating = false;
   let shuffledQuotes = [];
   let shownIndices = [];
-  let lastAuthor = null;
 
   function shuffleQuotes() {
     const arr = QUOTES.map((q, i) => i);
@@ -28,7 +27,6 @@
     shuffledQuotes = shuffleQuotes();
     shownIndices = [];
     currentIndex = 0;
-    lastAuthor = null;
     if (shuffledQuotes.length > 1) {
       const randIdx = Math.floor(Math.random() * shuffledQuotes.length);
       [shuffledQuotes[0], shuffledQuotes[randIdx]] = [shuffledQuotes[randIdx], shuffledQuotes[0]];
@@ -39,14 +37,9 @@
     for (let offset = 1; offset <= shuffledQuotes.length; offset++) {
       const idx = (currentIndex + offset) % shuffledQuotes.length;
       const quoteIdx = shuffledQuotes[idx];
-      if (!shownIndices.includes(quoteIdx) && QUOTES[quoteIdx].author !== lastAuthor) {
+      if (!shownIndices.includes(quoteIdx)) {
         return idx;
       }
-    }
-    for (let offset = 1; offset <= shuffledQuotes.length; offset++) {
-      const idx = (currentIndex + offset) % shuffledQuotes.length;
-      const quoteIdx = shuffledQuotes[idx];
-      if (!shownIndices.includes(quoteIdx)) return idx;
     }
     return null;
   }
@@ -108,7 +101,6 @@
       quoteBox.removeEventListener('animationend', handleOut);
       // Mark shown
       shownIndices.push(shuffledQuotes[currentIndex]);
-      lastAuthor = QUOTES[shuffledQuotes[currentIndex]].author;
       if (shownIndices.length >= QUOTES.length) {
         pickRandomStart();
       } else {
@@ -165,10 +157,36 @@
   }
 
   function unloadAssets(bgClass) {
-    // Remove CSS if not needed
-    // For simplicity, since CSS is small, we can keep them loaded
-    // But for JS, we can remove scripts if needed, but it's tricky
-    // For now, just keep loaded
+    const assets = {
+      'bg-nebula-particles': { css: 'css/nebula_particles.css', js: 'js/nebula_particles.js' },
+      'bg-wavy-gradient': { css: 'css/wavy_gradient.css', js: null },
+      'bg-cosmic-particles': { css: 'css/cosmic_particles.css', js: 'js/cosmic_particles.js' }
+    };
+
+    // Get current assets needed
+    const currentAssets = assets[bgClass];
+    const neededCSS = currentAssets.css || null;
+    const neededJS = currentAssets.js || null;
+
+    // Remove CSS that are not needed for current background
+    const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
+    cssLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('css/') && href !== neededCSS && loadedAssets.css.has(href)) {
+        link.remove();
+        loadedAssets.css.delete(href);
+      }
+    });
+
+    // Remove JS that are not needed for current background
+    const scripts = document.querySelectorAll('script[src]');
+    scripts.forEach(script => {
+      const src = script.getAttribute('src');
+      if (src && src.startsWith('js/') && src !== neededJS && loadedAssets.js.has(src)) {
+        script.remove();
+        loadedAssets.js.delete(src);
+      }
+    });
   }
 
   // Restore saved background (if valid)
@@ -182,11 +200,17 @@
 
   async function applyBackground(idx) {
     const bgClass = backgrounds[idx];
+    const backgroundContainer = document.getElementById('background-container');
+    if (!backgroundContainer) return;
+
     const assets = {
       'bg-nebula-particles': { css: 'css/nebula_particles.css', js: 'js/nebula_particles.js' },
       'bg-wavy-gradient': { css: 'css/wavy_gradient.css', js: null },
       'bg-cosmic-particles': { css: 'css/cosmic_particles.css', js: 'js/cosmic_particles.js' }
     };
+
+    // Unload previous assets before loading new ones
+    unloadAssets(bgClass);
 
     // Load CSS and JS if needed
     const promises = [];
@@ -199,19 +223,19 @@
       console.error('Failed to load assets for', bgClass, e);
     }
 
-    backgrounds.forEach((c) => document.body.classList.remove(c));
-    document.body.classList.add(bgClass);
+    backgrounds.forEach((c) => backgroundContainer.classList.remove(c));
+    backgroundContainer.classList.add(bgClass);
 
-    // Particle lifecycle hooks (using namespace)
-    if (bgClass === 'bg-cosmic-particles' && window.particles && window.particles.cosmic) {
-      window.particles.cosmic.create();
-    } else if (window.particles && window.particles.cosmic) {
-      window.particles.cosmic.remove();
+    // Particle lifecycle hooks
+    if (bgClass === 'bg-cosmic-particles' && typeof createCosmicParticles !== 'undefined') {
+      createCosmicParticles.create();
+    } else if (typeof createCosmicParticles !== 'undefined') {
+      createCosmicParticles.remove();
     }
-    if (bgClass === 'bg-nebula-particles' && window.particles && window.particles.nebula) {
-      window.particles.nebula.create();
-    } else if (window.particles && window.particles.nebula) {
-      window.particles.nebula.remove();
+    if (bgClass === 'bg-nebula-particles' && typeof createNebulaParticles !== 'undefined') {
+      createNebulaParticles.create();
+    } else if (typeof createNebulaParticles !== 'undefined') {
+      createNebulaParticles.remove();
     }
     // Persist
     try { localStorage.setItem(BG_KEY, bgClass); } catch (e) { /* ignore */ }
