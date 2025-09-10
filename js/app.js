@@ -367,6 +367,9 @@
           if (isEditable) return;
           if (ev.key === "t" || ev.key === "T") {
             handleToggle();
+          } else if (ev.key === "Enter" || ev.key === " ") {
+            ev.preventDefault();
+            triggerNext();
           }
         } catch (e) {
           // If anything goes wrong, do nothing — avoid breaking key handling.
