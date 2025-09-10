@@ -51,7 +51,7 @@
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "quote";
-      btn.setAttribute("aria-live", "polite");
+      // Keep aria-live on the container (in HTML) — keep extra semantics here minimal
       // Quote text
       const spanText = document.createElement("span");
       spanText.textContent = qObj.text;
@@ -95,6 +95,32 @@
       );
 
       quotesList.appendChild(quoteEl);
+
+      // Add class to hide outline for programmatic focus (CSS will handle hiding)
+      quoteEl.classList.add("no-outline");
+
+      // Move focus to the newly created quote for keyboard & screen-reader users
+      try {
+        if (typeof quoteEl.focus === "function") {
+          // Use preventScroll when available to avoid scrolling the viewport unexpectedly
+          quoteEl.focus && quoteEl.focus({ preventScroll: true });
+        }
+      } catch (e) {
+        try {
+          // Fallback for older browsers
+          quoteEl.focus && quoteEl.focus();
+        } catch (ee) {
+          // swallow
+        }
+      }
+
+      // Remove no-outline class on user focus to allow outline for keyboard navigation
+      quoteEl.addEventListener(
+        "focus",
+        () => quoteEl.classList.remove("no-outline"),
+        { once: true },
+      );
+
       if (!animate) animating = false;
     }
 
@@ -125,6 +151,19 @@
     // Initialize quotes
     pickRandomStart();
     showQuote(currentIndex);
+
+    // Mark the initially displayed quote as shown so rotation logic won't repeat it immediately
+    try {
+      if (
+        Array.isArray(shuffledQuotes) &&
+        shuffledQuotes.length > 0 &&
+        !shownIndices.includes(shuffledQuotes[currentIndex])
+      ) {
+        shownIndices.push(shuffledQuotes[currentIndex]);
+      }
+    } catch (e) {
+      // ignore
+    }
 
     // Background/theme handling with persistence
     const BG_KEY = "ml:bg";
@@ -297,6 +336,22 @@
         applyBackground(currentBg);
         bgToggle.setAttribute("aria-pressed", String(currentBg !== 0));
         bgToggle.blur();
+
+        // Optionally announce via a status region if present
+        try {
+          const status = document.getElementById("bg-status");
+          if (status) {
+            const nameMap = {
+              "bg-nebula-particles": "Nebula",
+              "bg-wavy-gradient": "Wavy gradient",
+              "bg-cosmic-particles": "Cosmic",
+            };
+            const name = nameMap[backgrounds[currentBg]] || "background";
+            status.textContent = "Background switched to " + name;
+          }
+        } catch (e) {
+          // ignore
+        }
       }
       bgToggle.addEventListener("click", handleToggle);
       // keyboard: allow T to toggle as a shortcut

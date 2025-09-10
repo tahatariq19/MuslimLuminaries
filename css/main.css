@@ -1,167 +1,207 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  color: #222;
-  font-family: 'Segoe UI', Arial, sans-serif;
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    color: #222;
+    font-family: "Segoe UI", Arial, sans-serif;
 }
 
 #background-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
 }
 
 .container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: none;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 0;
-  backdrop-filter: none;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    backdrop-filter: none;
 }
 
 h1 {
-  text-align: center;
-  margin-bottom: 32px;
-  color: #fff;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    text-align: center;
+    margin-bottom: 32px;
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .quote {
-  font-size: clamp(1.4rem, 4vw, 2.4rem);
-  margin: 0 auto;
-  padding: 0.8em 1.2em;
-  border: none;
-  background: none;
-  border-radius: 0.5em;
-  box-shadow: none;
-  position: relative;
-  color: #fff;
-  text-align: left;
-  text-shadow: 0 2px 16px #4a90e2, 0 0px 2px #fff, 0 1px 8px #bfaaff, 0 0 2px #000;
-  max-width: 1140px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-  /* Animation state */
-  opacity: 1;
-  transform: translateZ(0) scale(1);
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    margin: 0 auto;
+    padding: 0.8em 1.2em;
+    border: none;
+    background: none;
+    border-radius: 0.5em;
+    box-shadow: none;
+    position: relative;
+    color: #fff;
+    text-align: left;
+    text-shadow:
+        0 2px 16px #4a90e2,
+        0 0px 2px #fff,
+        0 1px 8px #bfaaff,
+        0 0 2px #000;
+    max-width: 1140px;
+    cursor: pointer;
+    transition:
+        background 0.2s,
+        color 0.2s,
+        box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    /* Animation state */
+    opacity: 1;
+    transform: translateZ(0) scale(1);
 }
 
 .quote-leave {
-  animation: quoteFadeOut 0.41s forwards;
+    animation: quoteFadeOut 0.41s forwards;
 }
 
 .quote-enter {
-  animation: quoteFadeIn 0.41s forwards;
+    animation: quoteFadeIn 0.41s forwards;
 }
 
 @keyframes quoteFadeOut {
-  0% { opacity: 1; transform: translateZ(0) scale(1); }
-  100% { opacity: 0; transform: translateZ(-3.5px) scale(0.99625); }
+    0% {
+        opacity: 1;
+        transform: translateZ(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateZ(-3.5px) scale(0.99625);
+    }
 }
 
 @keyframes quoteFadeIn {
-  0% { opacity: 0; transform: translateZ(-3.5px) scale(0.99625); }
-  100% { opacity: 1; transform: translateZ(0) scale(1); }
+    0% {
+        opacity: 0;
+        transform: translateZ(-3.5px) scale(0.99625);
+    }
+    100% {
+        opacity: 1;
+        transform: translateZ(0) scale(1);
+    }
 }
 
 .quote:hover {
-  background: rgba(255,255,255,0.13);
-  box-shadow: 0 2px 16px rgba(74,144,226,0.18);
+    background: rgba(255, 255, 255, 0.13);
+    box-shadow: 0 2px 16px rgba(74, 144, 226, 0.18);
 }
 
 .author {
-  display: block;
-  text-align: right;
-  font-style: italic;
-  color: #ffe6a0;
-  margin-top: 32px;
-  margin-right: 18px;
-  font-size: 1.1em;
-  text-shadow: 0 1px 8px #4a90e2, 0 0 2px #fff, 0 0 2px #000;
-  align-self: flex-end;
+    display: block;
+    text-align: right;
+    font-style: italic;
+    color: #ffe6a0;
+    margin-top: 32px;
+    margin-right: 18px;
+    font-size: 1.1em;
+    text-shadow:
+        0 1px 8px #4a90e2,
+        0 0 2px #fff,
+        0 0 2px #000;
+    align-self: flex-end;
 }
 
 #bg-toggle {
-  display: inline-block;
-  position: absolute;
-  top: 32px;
-  right: 32px;
-  left: auto;
-  transform: none;
-  background: none;
-  color: #fff;
-  font-size: 1.5em;
-  font-family: inherit;
-  padding: 0.5em 1.2em;
-  border: none;
-  border-radius: 0.5em;
-  box-shadow: none;
-  cursor: pointer;
-  text-align: center;
-  text-shadow: 0 2px 16px #4a90e2, 0 0px 2px #fff, 0 1px 8px #bfaaff, 0 0 2px #000;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s;
-  z-index: 10;
-  outline: none;
-  border: 2px solid transparent;
+    display: inline-block;
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    left: auto;
+    transform: none;
+    background: none;
+    color: #fff;
+    font-size: 1.5em;
+    font-family: inherit;
+    padding: 0.5em 1.2em;
+    border: none;
+    border-radius: 0.5em;
+    box-shadow: none;
+    cursor: pointer;
+    text-align: center;
+    text-shadow:
+        0 2px 16px #4a90e2,
+        0 0px 2px #fff,
+        0 1px 8px #bfaaff,
+        0 0 2px #000;
+    transition:
+        background 0.2s,
+        color 0.2s,
+        box-shadow 0.2s,
+        border 0.2s;
+    z-index: 10;
+    outline: none;
+    border: 2px solid transparent;
 }
-#bg-toggle:hover, #bg-toggle:focus {
-  background: rgba(255,255,255,0.13);
-  border: 2px solid #4a90e2;
-  box-shadow: 0 2px 16px rgba(74,144,226,0.18);
-  color: #fff;
-  outline: none;
+#bg-toggle:hover,
+#bg-toggle:focus {
+    background: rgba(255, 255, 255, 0.13);
+    border: 2px solid #4a90e2;
+    box-shadow: 0 2px 16px rgba(74, 144, 226, 0.18);
+    color: #fff;
+    outline: none;
 }
 
 /* Accessibility & theme overrides (appended) */
-:root{
-  --text-color: #fff;
-  --accent: #4a90e2;
-  --focus-ring: rgba(74,144,226,0.35);
-  --muted: #ffe6a0;
+:root {
+    --text-color: #fff;
+    --accent: #4a90e2;
+    --focus-ring: rgba(74, 144, 226, 0.35);
+    --muted: #ffe6a0;
 }
 
 /* Ensure small-screen scrolling but prevent overflow for particle backgrounds */
 
-
 /* Skip link for keyboard users */
 .skip-link {
-  position: absolute;
-  left: -999px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  z-index: 1000;
+    position: absolute;
+    left: -999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    z-index: 1000;
 }
 .skip-link:focus {
-  left: 12px;
-  top: 12px;
-  width: auto;
-  height: auto;
-  padding: 8px 12px;
-  background: rgba(0,0,0,0.8);
-  color: white;
-  border-radius: 4px;
-  text-decoration: none;
+    left: 12px;
+    top: 12px;
+    width: auto;
+    height: auto;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
 }
 
 /* Focus-visible for bg-toggle and quote */
 #bg-toggle:focus-visible,
 .quote:focus-visible {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 4px;
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 4px;
 }
 
+/* Hide outline for mouse/programmatic focus on quotes, keep for keyboard */
+.quote:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Hide outline for programmatic focus */
+.quote.no-outline:focus-visible {
+    outline: none;
+}
