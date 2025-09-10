@@ -1,64 +1,110 @@
 /* Nebula Particles Background */
 .bg-nebula-particles {
-  background:
-    radial-gradient(ellipse at 70% 40%, rgba(255,80,200,0.18) 0%, rgba(0,0,0,0.0) 60%),
-    radial-gradient(ellipse at 30% 60%, rgba(80,180,255,0.18) 0%, rgba(0,0,0,0.0) 60%),
-    linear-gradient(120deg, #0a1633 0%, #1a2746 40%, #3a1c71 70%, #d76d77 100%, #232946 120%);
-  overflow: hidden;
-  position: relative;
+    background:
+        radial-gradient(
+            ellipse at 70% 40%,
+            rgba(255, 80, 200, 0.18) 0%,
+            rgba(0, 0, 0, 0) 60%
+        ),
+        radial-gradient(
+            ellipse at 30% 60%,
+            rgba(80, 180, 255, 0.18) 0%,
+            rgba(0, 0, 0, 0) 60%
+        ),
+        linear-gradient(
+            120deg,
+            #0a1633 0%,
+            #1a2746 40%,
+            #3a1c71 70%,
+            #d76d77 100%,
+            #232946 120%
+        );
+    overflow: hidden;
+    position: relative;
 }
 .bg-nebula-particles::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    radial-gradient(circle at 60% 30%, rgba(255,80,200,0.12) 0%, rgba(0,0,0,0.0) 60%),
-    radial-gradient(circle at 30% 70%, rgba(80,180,255,0.10) 0%, rgba(0,0,0,0.0) 60%),
-    radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.25) 80%, rgba(0,0,0,0.7) 100%);
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(
+            circle at 60% 30%,
+            rgba(255, 80, 200, 0.12) 0%,
+            rgba(0, 0, 0, 0) 60%
+        ),
+        radial-gradient(
+            circle at 30% 70%,
+            rgba(80, 180, 255, 0.1) 0%,
+            rgba(0, 0, 0, 0) 60%
+        ),
+        radial-gradient(
+            ellipse at 50% 50%,
+            rgba(0, 0, 0, 0.25) 80%,
+            rgba(0, 0, 0, 0.7) 100%
+        );
 }
 .nebula-star {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1;
-  animation: nebula-float-dynamic 14s linear infinite;
-  filter: blur(0.5px);
-  opacity: 0.8;
-  --angle: 0deg;
-  --distance: 80vh; /* Reduced from 120vh to prevent overflow */
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: nebula-float-dynamic 14s linear infinite;
+    filter: blur(0.5px);
+    opacity: 0.8;
+    --angle: 0deg;
+    --distance: 80vh; /* Reduced from 120vh to prevent overflow */
 }
 .nebula-star.glow {
-  filter: blur(2.5px);
-  opacity: 0.5;
+    filter: blur(2.5px);
+    opacity: 0.5;
 }
 .nebula-star.spiky {
-  box-shadow: 0 0 8px 2px #fff, 0 0 24px 4px #fff, 0 0 0 2px #fff, 0 0 0 4px #fff;
-  opacity: 0.9;
+    box-shadow:
+        0 0 8px 2px #fff,
+        0 0 24px 4px #fff,
+        0 0 0 2px #fff,
+        0 0 0 4px #fff;
+    opacity: 0.9;
 }
 .nebula-star.twinkle {
-  animation: nebula-float-dynamic 14s linear infinite, twinkle 2.5s ease-in-out infinite;
+    animation:
+        nebula-float-dynamic 14s linear infinite,
+        twinkle 2.5s ease-in-out infinite;
 }
 @keyframes nebula-float-dynamic {
-  0% {
-    opacity: 0.8;
-    transform: translate(0, 0) scale(1) rotate(0deg);
-  }
-  100% {
-    opacity: 0.2;
-    transform:
-      translate(
-        calc(var(--distance) * cos(var(--angle))),
-        calc(var(--distance) * sin(var(--angle)))
-      )
-      scale(1.2)
-      rotate(360deg);
-  }
+    0% {
+        opacity: 0.8;
+        transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+    100% {
+        opacity: 0.2;
+        /* Use precomputed pixel translations --tx and --ty set by JS.
+       CSS cannot evaluate sin/cos, so JS must compute these values. */
+        transform: translate(var(--tx, 0px), var(--ty, 0px)) scale(1.2)
+            rotate(360deg);
+    }
 }
 @keyframes twinkle {
-  0%, 100% { opacity: 0.7; filter: brightness(1); }
-  20% { opacity: 1; filter: brightness(1.5); }
-  50% { opacity: 0.4; filter: brightness(0.7); }
-  70% { opacity: 1; filter: brightness(1.3); }
+    0%,
+    100% {
+        opacity: 0.7;
+        filter: brightness(1);
+    }
+    20% {
+        opacity: 1;
+        filter: brightness(1.5);
+    }
+    50% {
+        opacity: 0.4;
+        filter: brightness(0.7);
+    }
+    70% {
+        opacity: 1;
+        filter: brightness(1.3);
+    }
 }
