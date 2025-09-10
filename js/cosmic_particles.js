@@ -18,6 +18,8 @@ const createCosmicParticles = (function () {
     for (let i = 0; i < 44; i++) {
       const p = document.createElement("div");
       p.className = "particle";
+      // mark particles with a specific modifier class so removals are scoped and safe
+      p.classList.add("particle--cosmic");
       if (Math.random() > 0.8) p.classList.add("glow");
       if (Math.random() > 0.6) p.classList.add("twinkle");
       const size = Math.random() * 6 + 2;
@@ -37,7 +39,10 @@ const createCosmicParticles = (function () {
 
   function remove() {
     console.log("Removing cosmic particles");
-    const particles = document.querySelectorAll(".particle");
+    // scope removals to the background container to avoid affecting unrelated elements
+    const container =
+      document.getElementById("background-container") || document.body;
+    const particles = container.querySelectorAll(".particle--cosmic");
     console.log(`Found ${particles.length} cosmic particles to remove`);
     for (let i = particles.length - 1; i >= 0; i--) {
       particles[i].remove();

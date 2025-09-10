@@ -28,6 +28,8 @@ const createNebulaParticles = (function () {
     for (let i = 0; i < 52; i++) {
       const s = document.createElement("div");
       s.className = "nebula-star";
+      // mark nebula elements with a specific modifier class so removals are scoped and safe
+      s.classList.add("nebula-star--bg");
       if (Math.random() > 0.8) s.classList.add("glow");
       if (Math.random() > 0.85) s.classList.add("spiky");
       if (Math.random() > 0.6) s.classList.add("twinkle");
@@ -68,7 +70,10 @@ const createNebulaParticles = (function () {
 
   function remove() {
     console.log("Removing nebula particles");
-    const stars = document.querySelectorAll(".nebula-star");
+    // scope removals to the background container so we don't affect unrelated elements
+    const container =
+      document.getElementById("background-container") || document.body;
+    const stars = container.querySelectorAll(".nebula-star--bg");
     console.log(`Found ${stars.length} nebula stars to remove`);
     for (let i = stars.length - 1; i >= 0; i--) {
       stars[i].remove();
