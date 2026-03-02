@@ -23,25 +23,20 @@ window.ThemeManager.register({
 		resize();
 		window.addEventListener("resize", resize);
 
-		// --- Star Data ---
-		const colors = [
-			[255, 255, 255], // white
-			[255, 233, 233], // warm pink
-			[232, 234, 255], // cool blue
-			[255, 240, 251], // soft rose
-			[212, 238, 255], // ice blue
-		];
+		// --- Pre-computed Color Data ---
+		// Store as hex strings (set once) + use globalAlpha for opacity
+		// This eliminates 450+ rgba() string allocations per frame
+		const colorHex = ["#ffffff", "#ffe9e9", "#e8eaff", "#fff0fb", "#d4eeff"];
 
 		const STAR_COUNT = 450;
 		const stars = [];
 
 		// Pre-compute the 4-point star path as a reusable Path2D
-		// This is the hypocycloid curve, scaled to unit size (-1 to 1)
+		// Reduced from 80 to 24 segments — visually identical at these sizes
 		const sparklePathUnit = new Path2D();
-		const steps = 80;
+		const steps = 24;
 		for (let s = 0; s <= steps; s++) {
 			const t = (s / steps) * Math.PI * 2;
-			// Astroid / 4-point star curve
 			const px = Math.cos(t) ** 3;
 			const py = Math.sin(t) ** 3;
 			if (s === 0) sparklePathUnit.moveTo(px, py);
@@ -49,26 +44,29 @@ window.ThemeManager.register({
 		}
 		sparklePathUnit.closePath();
 
+		// Shared constants
+		const TWO_PI = Math.PI * 2;
+		const PI = Math.PI;
+
 		const createStar = (isInitial) => {
 			const isSparkle = Math.random() > 0.94;
 			const baseSize = isSparkle
 				? Math.random() * 8 + 4
 				: Math.random() * 1.5 + 0.5;
 
-			const lifespan = 3.5 + Math.random() * 3; // 3.5s to 6.5s
-			const sleepAfter = 0.5 + Math.random() * 1.5; // 0.5s to 2s pause after death
+			const lifespan = 3.5 + Math.random() * 3;
+			const sleepAfter = 0.5 + Math.random() * 1.5;
 			const totalCycle = lifespan + sleepAfter;
-
-			// If initial, randomize where in the cycle this star starts
 			const age = isInitial ? Math.random() * totalCycle : 0;
 
 			return {
-				x: Math.random(), // 0-1 normalized
+				x: Math.random(),
 				y: Math.random(),
 				baseSize,
 				isSparkle,
-				color: colors[Math.floor(Math.random() * colors.length)],
+				colorIdx: Math.floor(Math.random() * colorHex.length),
 				lifespan,
+				invLifespan: 1 / lifespan, // Pre-compute division
 				totalCycle,
 				age,
 			};
@@ -81,8 +79,9 @@ window.ThemeManager.register({
 			star.baseSize = star.isSparkle
 				? Math.random() * 8 + 4
 				: Math.random() * 1.5 + 0.5;
-			star.color = colors[Math.floor(Math.random() * colors.length)];
+			star.colorIdx = Math.floor(Math.random() * colorHex.length);
 			star.lifespan = 3.5 + Math.random() * 3;
+			star.invLifespan = 1 / star.lifespan;
 			const sleepAfter = 0.5 + Math.random() * 1.5;
 			star.totalCycle = star.lifespan + sleepAfter;
 			star.age = 0;
@@ -93,57 +92,66 @@ window.ThemeManager.register({
 			stars.push(createStar(true));
 		}
 
-		// --- Render Loop ---
+		// --- Render Loop (throttled to ~30fps) ---
 		let lastTime = performance.now();
+		const FRAME_INTERVAL = 1000 / 30; // ~33ms between draws
+		let accumulator = 0;
 
 		const draw = (now) => {
-			const dt = (now - lastTime) / 1000; // delta in seconds
+			const elapsed = now - lastTime;
 			lastTime = now;
+			accumulator += elapsed;
 
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			// Only draw when enough time has passed for a 30fps frame
+			if (accumulator >= FRAME_INTERVAL) {
+				const dt = accumulator / 1000;
+				accumulator = 0;
 
-			for (let i = 0; i < STAR_COUNT; i++) {
-				const s = stars[i];
-				s.age += dt;
+				const w = canvas.width;
+				const h = canvas.height;
+				ctx.clearRect(0, 0, w, h);
 
-				// Recycle star when its full cycle (life + sleep) is done
-				if (s.age >= s.totalCycle) {
-					resetStar(s);
-					continue;
+				for (let i = 0; i < STAR_COUNT; i++) {
+					const s = stars[i];
+					s.age += dt;
+
+					if (s.age >= s.totalCycle) {
+						resetStar(s);
+						continue;
+					}
+
+					if (s.age >= s.lifespan) continue;
+
+					const progress = s.age * s.invLifespan; // Multiply instead of divide
+					const opacity = Math.sin(progress * PI);
+
+					if (opacity < 0.02) continue;
+
+					const px = s.x * w;
+					const py = s.y * h;
+
+					// Use globalAlpha + solid hex color (zero string allocation)
+					ctx.globalAlpha = opacity;
+					ctx.fillStyle = colorHex[s.colorIdx];
+
+					if (s.isSparkle) {
+						const scale = s.baseSize * 0.55 * (0.6 + opacity * 0.5);
+						// Use setTransform instead of save/translate/scale/restore
+						ctx.setTransform(scale, 0, 0, scale, px, py);
+						ctx.fill(sparklePathUnit);
+					} else {
+						const radius = s.baseSize * 0.5 * (0.7 + opacity * 0.3);
+						// Reset transform for arc drawing
+						ctx.setTransform(1, 0, 0, 1, 0, 0);
+						ctx.beginPath();
+						ctx.arc(px, py, radius, 0, TWO_PI);
+						ctx.fill();
+					}
 				}
 
-				// If in sleep phase, skip drawing
-				if (s.age >= s.lifespan) continue;
-
-				// Calculate opacity: fade in first half, fade out second half
-				const progress = s.age / s.lifespan; // 0 to 1
-				// Sine curve gives smooth fade-in / fade-out (0 -> 1 -> 0)
-				const opacity = Math.sin(progress * Math.PI);
-
-				if (opacity < 0.01) continue; // Skip nearly invisible stars
-
-				const px = s.x * canvas.width;
-				const py = s.y * canvas.height;
-				const [r, g, b] = s.color;
-
-				if (s.isSparkle) {
-					// Draw the 4-point star using pre-computed path
-					// Path is -1 to 1 (2 units wide), so halve the scale, then +10%
-					const scale = s.baseSize * 0.55 * (0.6 + opacity * 0.5);
-					ctx.save();
-					ctx.translate(px, py);
-					ctx.scale(scale, scale);
-					ctx.fillStyle = `rgba(${r},${g},${b},${opacity})`;
-					ctx.fill(sparklePathUnit);
-					ctx.restore();
-				} else {
-					// Simple filled circle for dot stars
-					const radius = s.baseSize * 0.5 * (0.7 + opacity * 0.3);
-					ctx.beginPath();
-					ctx.arc(px, py, radius, 0, Math.PI * 2);
-					ctx.fillStyle = `rgba(${r},${g},${b},${opacity})`;
-					ctx.fill();
-				}
+				// Reset transform and alpha for next frame's clearRect
+				ctx.setTransform(1, 0, 0, 1, 0, 0);
+				ctx.globalAlpha = 1;
 			}
 
 			window.t4AnimFrame = requestAnimationFrame(draw);
