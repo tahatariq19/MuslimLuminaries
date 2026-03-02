@@ -1,55 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Muslim Luminaries - Quotes</title>
-        <link rel="stylesheet" href="css/main.css" />
-        <style>
-            /* minimal visually-hidden utility for offscreen/live regions */
-            .visually-hidden {
-                position: absolute !important;
-                width: 1px !important;
-                height: 1px !important;
-                padding: 0 !important;
-                margin: -1px !important;
-                overflow: hidden !important;
-                clip: rect(1px, 1px, 1px, 1px) !important;
-                white-space: nowrap !important;
-                border: 0 !important;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="background-container"></div>
-        <a class="skip-link" href="#quotes-list">Skip to quotes</a>
-        <button
-            id="bg-toggle"
-            aria-pressed="false"
-            aria-label="Switch background"
-            title="Switch background"
-        >
-            🎆
-        </button>
-        <div class="container" role="main">
-            <h1 class="visually-hidden">Muslim Luminaries — Quotes</h1>
-            <div
-                id="quotes-list"
-                tabindex="-1"
-                aria-live="polite"
-                aria-atomic="true"
-            ></div>
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muslim Luminaries - Quote Experience</title>
 
-        <!-- Live status region for announcing background changes -->
-        <div
-            id="bg-status"
-            class="visually-hidden"
-            aria-live="polite"
-            aria-atomic="true"
-        ></div>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="main.css" />
 
-        <script src="js/quotes.js"></script>
-        <script src="js/app.js"></script>
-    </body>
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="themes/dark-cosmic/dark-cosmic.css" />
+    <link rel="stylesheet" href="themes/glass-mesh/glass-mesh.css" />
+    <link rel="stylesheet" href="themes/aurora-glow/aurora-glow.css" />
+    <link rel="stylesheet" href="themes/twinkling-night/twinkling-night.css" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Space+Grotesk:wght@300;400;600&family=Plus+Jakarta+Sans:wght@300;400;600&family=Gilda+Display&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="theme-twinkling-night">
+    <h1 class="visually-hidden">Muslim Luminaries</h1>
+
+    <!-- Backgrounds (Injected via ThemeManager) -->
+    <div id="backgrounds-container"></div>
+
+    <!-- Actual Content -->
+    <div id="quote-container" role="main" aria-live="polite">
+        <div id="quote-text"></div>
+        <div id="quote-author"></div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button type="button" class="theme-toggle-btn" id="theme-btn" aria-label="Switch Theme">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <title>Theme Switching Palette Icon</title>
+            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+            <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path>
+        </svg>
+    </button>
+    <div class="theme-name-toast" id="theme-toast">Loading...</div>
+
+    <!-- Engine -->
+    <script src="quotes.js"></script>
+    <script src="app.js"></script>
+
+    <!-- Themes -->
+    <script src="themes/dark-cosmic/dark-cosmic.js"></script>
+    <script src="themes/glass-mesh/glass-mesh.js"></script>
+    <script src="themes/aurora-glow/aurora-glow.js"></script>
+    <script src="themes/twinkling-night/twinkling-night.js"></script>
+</body>
 </html>

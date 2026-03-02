@@ -1,0 +1,129 @@
+/* =============================================================
+   THEME 1: DARK COSMIC
+   ============================================================= */
+body.theme-dark-cosmic {
+	background-color: #020205;
+	color: #fff;
+	font-family: "Outfit", sans-serif;
+}
+body.theme-dark-cosmic .theme-1-bg {
+	position: fixed;
+	top: -5%;
+	left: -5%;
+	width: 110%;
+	height: 110%;
+	background: radial-gradient(circle at center, #110a1a 0%, #020205 100%);
+	z-index: 1;
+	pointer-events: none;
+	transition: transform 0.2s ease-out;
+}
+body.theme-dark-cosmic .theme-1-stars {
+	box-shadow: 0 0 transparent; /* Initialized in JS */
+	width: 1px;
+	height: 1px;
+	background: transparent;
+	animation: animT1Star 100s linear infinite;
+}
+body.theme-dark-cosmic .theme-1-stars-fast {
+	box-shadow: 0 0 transparent; /* Initialized in JS */
+	width: 2px;
+	height: 2px;
+	background: transparent;
+	animation: animT1Star 50s linear infinite;
+}
+@keyframes animT1Star {
+	from {
+		transform: translateY(0px);
+	}
+	to {
+		transform: translateY(-2000px);
+	}
+}
+body.theme-dark-cosmic .theme-1-orbs {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 2;
+	pointer-events: none;
+	transition: transform 0.3s;
+}
+body.theme-dark-cosmic .glowing-orb,
+body.theme-dark-cosmic .glowing-orb-2 {
+	position: absolute;
+	border-radius: 50%;
+	filter: blur(120px);
+	animation: floatT1 25s infinite ease-in-out;
+}
+body.theme-dark-cosmic .glowing-orb {
+	width: 400px;
+	height: 400px;
+	background: radial-gradient(circle, #b000ff, transparent 70%);
+	opacity: 0.25;
+	top: 10%;
+	left: 20%;
+}
+body.theme-dark-cosmic .glowing-orb-2 {
+	width: 500px;
+	height: 500px;
+	background: radial-gradient(circle, #00f0ff, transparent 70%);
+	opacity: 0.15;
+	bottom: 5%;
+	right: 15%;
+	animation-duration: 20s;
+	animation-direction: reverse;
+	filter: blur(140px);
+}
+@keyframes floatT1 {
+	0% {
+		transform: translate(0, 0) scale(1);
+	}
+	33% {
+		transform: translate(30px, -50px) scale(1.1);
+	}
+	66% {
+		transform: translate(-20px, 20px) scale(0.9);
+	}
+	100% {
+		transform: translate(0, 0) scale(1);
+	}
+}
+body.theme-dark-cosmic #quote-text {
+	font-family: "Space Grotesk", sans-serif;
+	font-weight: 300;
+	letter-spacing: -0.01em;
+	text-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+	background: linear-gradient(135deg, #ffffff 0%, #a5a5a5 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+body.theme-dark-cosmic #quote-author {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #00f0ff;
+	text-transform: uppercase;
+	letter-spacing: 0.2em;
+	position: relative;
+	opacity: 0.8;
+	-webkit-text-fill-color: #00f0ff;
+}
+body.theme-dark-cosmic #quote-author::before {
+	content: "";
+	position: absolute;
+	bottom: -12px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 30px;
+	height: 2px;
+	background: #00f0ff;
+	box-shadow: 0 0 15px #00f0ff;
+	transition: width 0.3s;
+}
+body.theme-dark-cosmic:hover #quote-author::before {
+	width: 60px;
+}
+body.theme-dark-cosmic .layer.l-dark-cosmic {
+	display: block;
+}
