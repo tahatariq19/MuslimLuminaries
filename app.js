@@ -1,6 +1,81 @@
-// === Quote Logic & State ===
-const quotes = typeof getQuotesData === "function" ? getQuotesData() : [];
-let currentQuoteIndex = Math.floor(Math.random() * quotes.length);
+// === Quote Manager & Logic ===
+const QuoteManager = {
+	quotes: [],
+	playlist: [],
+	currentIndex: 0,
+	seenCount: 0,
+
+	init: function (data) {
+		this.quotes = data;
+		if (this.quotes.length > 0) {
+			this.generatePlaylist();
+		}
+	},
+
+	shuffle: (array) => {
+		const newArr = [...array];
+		for (let i = newArr.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+		}
+		return newArr;
+	},
+
+	generatePlaylist: function () {
+		const quotesByAuthor = {};
+		this.quotes.forEach((q) => {
+			if (!quotesByAuthor[q.author]) quotesByAuthor[q.author] = [];
+			quotesByAuthor[q.author].push(q);
+		});
+
+		// Shuffle each author's quotes internally
+		for (const author in quotesByAuthor) {
+			quotesByAuthor[author] = this.shuffle(quotesByAuthor[author]);
+		}
+
+		const authors = Object.keys(quotesByAuthor);
+		const newPlaylist = [];
+		let round = 0;
+
+		while (true) {
+			let roundAuthors = authors.filter(
+				(a) => quotesByAuthor[a].length > round,
+			);
+			if (roundAuthors.length === 0) break;
+
+			// Shuffle authors for this round
+			roundAuthors = this.shuffle(roundAuthors);
+			roundAuthors.forEach((a) => {
+				newPlaylist.push(quotesByAuthor[a][round]);
+			});
+			round++;
+		}
+
+		this.playlist = newPlaylist;
+		// Start at a random point on load or reset
+		this.currentIndex = Math.floor(Math.random() * this.playlist.length);
+		this.seenCount = 0;
+	},
+
+	next: function () {
+		if (this.playlist.length === 0) return null;
+		const quote = this.playlist[this.currentIndex];
+
+		this.currentIndex = (this.currentIndex + 1) % this.playlist.length;
+		this.seenCount++;
+
+		// When we've seen everything once, reshuffle and start a new randomized cycle
+		if (this.seenCount >= this.playlist.length) {
+			this.generatePlaylist();
+		}
+
+		return quote;
+	},
+};
+
+const rawQuotes = typeof getQuotesData === "function" ? getQuotesData() : [];
+QuoteManager.init(rawQuotes);
+
 let isFirstLoad = true;
 let animating = false;
 
@@ -75,11 +150,22 @@ window.ThemeManager = {
 			}
 		});
 
-		// Set default theme to 'twinkling-night' if exists, or index 0
-		const defaultIndex = this.themes.findIndex(
-			(t) => t.id === "twinkling-night",
-		);
-		this.currentThemeIndex = defaultIndex !== -1 ? defaultIndex : 0;
+		// Theme Priority:
+		// 1. Saved theme from localStorage
+		// 2. Default theme 'twinkling-night'
+		// 3. First registered theme
+		const savedThemeId = localStorage.getItem("lastSelectedTheme");
+		let targetIndex = -1;
+
+		if (savedThemeId) {
+			targetIndex = this.themes.findIndex((t) => t.id === savedThemeId);
+		}
+
+		if (targetIndex === -1) {
+			targetIndex = this.themes.findIndex((t) => t.id === "twinkling-night");
+		}
+
+		this.currentThemeIndex = targetIndex !== -1 ? targetIndex : 0;
 
 		this.switchTheme();
 		triggerNextQuote();
@@ -91,6 +177,9 @@ window.ThemeManager = {
 		if (!activeTheme) return;
 
 		document.body.className = `theme-${activeTheme.id}`;
+
+		// Persist the theme choice
+		localStorage.setItem("lastSelectedTheme", activeTheme.id);
 
 		const toast = document.getElementById("theme-toast");
 		if (toast) {
@@ -141,10 +230,10 @@ function updateContent() {
 	const qLine = document.getElementById("quote-text");
 	const qAuth = document.getElementById("quote-author");
 	const container = document.getElementById("quote-container");
-	if (quotes.length === 0 || !qLine || !qAuth || !container) return;
+	if (!qLine || !qAuth || !container) return;
 
-	const quote = quotes[currentQuoteIndex];
-	currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+	const quote = QuoteManager.next();
+	if (!quote) return;
 
 	qLine.innerText = `"${quote.text}"`;
 
