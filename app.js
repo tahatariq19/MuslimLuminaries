@@ -52,8 +52,10 @@ const QuoteManager = {
 		}
 
 		this.playlist = newPlaylist;
-		// Start at a random point on load or reset
-		this.currentIndex = Math.floor(Math.random() * this.playlist.length);
+		// Always start at the top. Randomness comes from the builder itself:
+		// each round shuffles its author order, and each author's quote pool
+		// is also shuffled — so every load produces a genuinely different sequence.
+		this.currentIndex = 0;
 		this.seenCount = 0;
 	},
 
