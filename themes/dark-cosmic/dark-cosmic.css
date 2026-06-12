@@ -30,6 +30,8 @@ body.theme-dark-cosmic .theme-1-stars {
 	height: 1px;
 	background: transparent;
 	animation: animT1Star 100s linear infinite;
+	will-change: transform;
+	contain: layout style;
 }
 body.theme-dark-cosmic .theme-1-stars-fast {
 	box-shadow: 0 0 transparent; /* Initialized in JS */
@@ -37,6 +39,8 @@ body.theme-dark-cosmic .theme-1-stars-fast {
 	height: 2px;
 	background: transparent;
 	animation: animT1Star 50s linear infinite;
+	will-change: transform;
+	contain: layout style;
 }
 @keyframes animT1Star {
 	from {
@@ -62,6 +66,7 @@ body.theme-dark-cosmic .glowing-orb-2 {
 	border-radius: 50%;
 	filter: blur(120px);
 	animation: floatT1 25s infinite ease-in-out;
+	will-change: transform, filter;
 }
 body.theme-dark-cosmic .glowing-orb {
 	width: 400px;

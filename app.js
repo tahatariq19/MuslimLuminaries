@@ -89,7 +89,6 @@ window.ThemeManager = {
 	isInitialized: false,
 
 	register: function (themeConfig) {
-		console.log("Registering theme:", themeConfig.id);
 		this.themes.push(themeConfig);
 
 		// Inject layer for the newly loaded theme
@@ -104,21 +103,25 @@ window.ThemeManager = {
 	},
 
 	loadTheme: function (themeId) {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			if (this.themes.find(t => t.id === themeId)) return resolve();
 
 			let loaded = 0;
-			const check = () => { if (++loaded === 2) resolve(); };
+			let failed = false;
+			const check = () => { if (++loaded === 2) { failed ? reject(new Error(`Theme "${themeId}" failed to load`)) : resolve(); } };
+			const fail = () => { failed = true; check(); };
 
 			const link = document.createElement("link");
 			link.rel = "stylesheet";
 			link.href = `themes/${themeId}/${themeId}.css`;
-			link.onload = link.onerror = check;
+			link.onload = check;
+			link.onerror = fail;
 			document.head.appendChild(link);
 
 			const script = document.createElement("script");
 			script.src = `themes/${themeId}/${themeId}.js`;
-			script.onload = script.onerror = check;
+			script.onload = check;
+			script.onerror = fail;
 			document.body.appendChild(script);
 		});
 	},
@@ -157,14 +160,18 @@ window.ThemeManager = {
 		}
 		this.currentThemeIndex = this.availableThemes.indexOf(targetThemeId);
 
-		await this.loadTheme(targetThemeId);
+		await this.loadTheme(targetThemeId).catch(() => {
+			console.warn(`Failed to load theme "${targetThemeId}", falling back to default.`);
+			this.currentThemeIndex = 0;
+			return this.loadTheme(this.availableThemes[0]);
+		});
 		this.switchTheme();
 		triggerNextQuote();
 
 		// Silently pre-fetch remaining themes
 		setTimeout(() => {
 			this.availableThemes.forEach(id => {
-				if (id !== targetThemeId) this.loadTheme(id);
+				if (id !== targetThemeId) this.loadTheme(id).catch(() => {});
 			});
 		}, 1000);
 
@@ -192,8 +199,8 @@ window.ThemeManager = {
 		if (toast) {
 			toast.innerText = activeTheme.name;
 			toast.classList.add("show");
-			clearTimeout(window.toastTimer);
-			window.toastTimer = setTimeout(
+			clearTimeout(this._toastTimer);
+			this._toastTimer = setTimeout(
 				() => toast.classList.remove("show"),
 				2000,
 			);
@@ -211,7 +218,7 @@ window.ThemeManager = {
 			this.currentThemeIndex = 0;
 		}
 		const targetThemeId = this.availableThemes[this.currentThemeIndex];
-		await this.loadTheme(targetThemeId);
+		await this.loadTheme(targetThemeId).catch(() => {});
 		this.switchTheme();
 	},
 

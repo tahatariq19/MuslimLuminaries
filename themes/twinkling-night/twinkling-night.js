@@ -13,7 +13,7 @@ window.ThemeManager.register({
 		const ctx = canvas.getContext("2d");
 
 		// Cancel any previous animation loop when theme is re-initialized
-		if (window.t4AnimFrame) cancelAnimationFrame(window.t4AnimFrame);
+		if (window.ThemeManager._t4AnimFrame) cancelAnimationFrame(window.ThemeManager._t4AnimFrame);
 
 		// --- Canvas Setup ---
 		const resize = () => {
@@ -21,9 +21,9 @@ window.ThemeManager.register({
 			canvas.height = window.innerHeight;
 		};
 		resize();
-		window.removeEventListener("resize", window.t4Resize);
-		window.t4Resize = resize;
-		window.addEventListener("resize", window.t4Resize);
+		window.removeEventListener("resize", window.ThemeManager._t4Resize);
+		window.ThemeManager._t4Resize = resize;
+		window.addEventListener("resize", window.ThemeManager._t4Resize);
 
 		// --- Pre-computed Color Data ---
 		// Store as hex strings (set once) + use globalAlpha for opacity
@@ -106,7 +106,7 @@ window.ThemeManager.register({
 
 			// Pause animation and skip drawing when theme is inactive
 			if (!document.body.classList.contains("theme-twinkling-night")) {
-				window.t4AnimFrame = requestAnimationFrame(draw);
+				window.ThemeManager._t4AnimFrame = requestAnimationFrame(draw);
 				return;
 			}
 
@@ -162,9 +162,9 @@ window.ThemeManager.register({
 				ctx.globalAlpha = 1;
 			}
 
-			window.t4AnimFrame = requestAnimationFrame(draw);
+			window.ThemeManager._t4AnimFrame = requestAnimationFrame(draw);
 		};
 
-		window.t4AnimFrame = requestAnimationFrame(draw);
+		window.ThemeManager._t4AnimFrame = requestAnimationFrame(draw);
 	},
 });

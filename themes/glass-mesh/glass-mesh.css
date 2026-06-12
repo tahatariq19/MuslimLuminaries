@@ -17,6 +17,7 @@ body.theme-glass-mesh .theme-2-blobs {
 	opacity: 0.65;
 	animation: breatheT2 10s ease-in-out infinite alternate;
 	pointer-events: none;
+	will-change: transform, opacity, filter;
 }
 @keyframes breatheT2 {
 	0% {
@@ -32,6 +33,7 @@ body.theme-glass-mesh .t2-blob {
 	position: absolute;
 	border-radius: 50%;
 	animation: glideT2 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+	will-change: transform;
 }
 body.theme-glass-mesh .tb1 {
 	width: 50vw;

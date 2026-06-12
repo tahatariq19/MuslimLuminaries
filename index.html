@@ -19,18 +19,21 @@
 
     <!-- Theme CSS (Lazy loaded via ThemeManager) -->
 
-    <!-- Fonts -->
+    <!-- Fonts (preconnect for faster load) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Space+Grotesk:wght@300;400;600&family=Plus+Jakarta+Sans:wght@300;400;600&family=Gilda+Display&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 
 </head>
 <body class="theme-twinkling-night">
+    <a class="skip-link" href="#quote-container">Skip to content</a>
     <h1 class="visually-hidden">Muslim Luminaries</h1>
 
     <!-- Backgrounds (Injected via ThemeManager) -->
     <div id="backgrounds-container"></div>
 
     <!-- Actual Content -->
-    <div id="quote-container" role="main" aria-live="polite">
+    <div id="quote-container" role="main" aria-live="polite" style="cursor: pointer;">
         <div id="quote-text"></div>
         <div id="quote-author"></div>
     </div>
