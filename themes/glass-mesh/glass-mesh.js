@@ -3,10 +3,10 @@ window.ThemeManager.register({
 	name: "Glass Mesh",
 	useTilde: true,
 	html: `
-        <div class="theme-2-blobs" id="t2-blobs">
-            <div class="t2-blob tb1"></div>
-            <div class="t2-blob tb2"></div>
-            <div class="t2-blob tb3"></div>
+        <div class="theme-glass-mesh-blobs" id="t2-blobs">
+            <div class="glass-mesh-blob tb1"></div>
+            <div class="glass-mesh-blob tb2"></div>
+            <div class="glass-mesh-blob tb3"></div>
         </div>
     `,
 	onMouseMove: (xPct, yPct) => {

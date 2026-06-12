@@ -6,13 +6,15 @@ const QuoteManager = {
 	seenCount: 0,
 
 	init: function (data) {
-		this.quotes = data;
-		if (this.quotes.length > 0) {
-			this.generatePlaylist();
+		if (!data || !Array.isArray(data) || data.length === 0) {
+			console.error("QuoteManager: No quote data provided or data is empty.");
+			return;
 		}
+		this.quotes = data;
+		this.generatePlaylist();
 	},
 
-	shuffle: (array) => {
+	shuffle: function (array) {
 		const newArr = [...array];
 		for (let i = newArr.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
@@ -37,11 +39,10 @@ const QuoteManager = {
 		const newPlaylist = [];
 		let round = 0;
 
-		while (true) {
+		while (authors.some((a) => quotesByAuthor[a].length > round)) {
 			let roundAuthors = authors.filter(
 				(a) => quotesByAuthor[a].length > round,
 			);
-			if (roundAuthors.length === 0) break;
 
 			// Shuffle authors for this round
 			roundAuthors = this.shuffle(roundAuthors);
@@ -86,6 +87,7 @@ window.ThemeManager = {
 	availableThemes: ['twinkling-night', 'glass-mesh', 'dark-cosmic', 'aurora-glow'],
 	themes: [],
 	currentThemeIndex: 0,
+	activeThemeId: null,
 	isInitialized: false,
 
 	register: function (themeConfig) {
@@ -126,25 +128,6 @@ window.ThemeManager = {
 		});
 	},
 
-	genStarsBoxShadow: (count, size, baseOpacity, colorful) => {
-		let shadows = "";
-		const colors = ["#ffffff", "#ffe9e9", "#e8eaff", "#fff0fb"];
-		for (let i = 0; i < count; i++) {
-			const x = (Math.random() * (colorful ? 100 : 150)).toFixed(2);
-			const y = (Math.random() * (colorful ? 100 : 200)).toFixed(2);
-			const op = (Math.random() * 0.5 + baseOpacity).toFixed(2);
-			const color = colorful
-				? colors[Math.floor(Math.random() * colors.length)]
-				: "#ffffff";
-			const hexOp = Math.floor(op * 255)
-				.toString(16)
-				.padStart(2, "0");
-			shadows += `${x}vw ${y}vh 0 ${Math.random() * size}px ${
-				colorful ? color + hexOp : `rgba(255,255,255,${op})`
-			}${i < count - 1 ? "," : ""}`;
-		}
-		return shadows;
-	},
 
 	initAll: async function () {
 		if (this.isInitialized) return;
@@ -192,8 +175,22 @@ window.ThemeManager = {
 		const activeTheme = this.themes.find(t => t.id === targetThemeId);
 		if (!activeTheme) return;
 
+		// Clean up the previously active theme
+		if (this.activeThemeId && this.activeThemeId !== activeTheme.id) {
+			const oldTheme = this.themes.find(t => t.id === this.activeThemeId);
+			if (oldTheme && oldTheme.onDeactivate) {
+				oldTheme.onDeactivate();
+			}
+		}
+
 		document.body.className = `theme-${activeTheme.id}`;
 		localStorage.setItem("lastSelectedTheme", activeTheme.id);
+		this.activeThemeId = activeTheme.id;
+
+		// Activate the new theme
+		if (activeTheme.onActivate) {
+			activeTheme.onActivate();
+		}
 
 		const toast = document.getElementById("theme-toast");
 		if (toast) {

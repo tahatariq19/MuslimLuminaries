@@ -1,12 +1,14 @@
 /* =============================================================
    TWINKLING NIGHT SKY
    ============================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Space+Grotesk:wght@300;400;600&display=swap');
+
 body.theme-twinkling-night {
 	background-color: #030408;
 	color: #fff;
 	font-family: "Outfit", sans-serif;
 }
-body.theme-twinkling-night .theme-4-sky {
+body.theme-twinkling-night .theme-twinkling-night-sky {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -40,7 +42,7 @@ body.theme-twinkling-night .milky-way {
 	filter: blur(45px);
 	transform: rotate(15deg);
 }
-body.theme-twinkling-night .theme-4-stars {
+body.theme-twinkling-night .theme-twinkling-night-stars {
 	position: fixed;
 	top: 0;
 	left: 0;

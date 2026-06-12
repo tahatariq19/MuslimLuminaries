@@ -1,12 +1,14 @@
 /* =============================================================
    GLASS MESH
    ============================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&display=swap');
+
 body.theme-glass-mesh {
 	background-color: #0c0a0f;
 	color: #fff;
 	font-family: "Plus Jakarta Sans", sans-serif;
 }
-body.theme-glass-mesh .theme-2-blobs {
+body.theme-glass-mesh .theme-glass-mesh-blobs {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -29,7 +31,7 @@ body.theme-glass-mesh .theme-2-blobs {
 		transform: scale(1.05);
 	}
 }
-body.theme-glass-mesh .t2-blob {
+body.theme-glass-mesh .glass-mesh-blob {
 	position: absolute;
 	border-radius: 50%;
 	animation: glideT2 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);

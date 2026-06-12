@@ -1,29 +1,35 @@
+let t4AnimFrame;
+let t4Resize;
+let t4Draw;
+
 window.ThemeManager.register({
 	id: "twinkling-night",
 	name: "Twinkling Night",
 	useTilde: false,
 	html: `
-        <div class="theme-4-sky"></div>
+        <div class="theme-twinkling-night-sky"></div>
         <div class="milky-way"></div>
-        <canvas class="theme-4-stars" id="t4-canvas"></canvas>
+        <canvas class="theme-twinkling-night-stars" id="t4-canvas"></canvas>
     `,
+	onActivate: () => {
+		if (t4Resize) window.addEventListener("resize", t4Resize);
+		if (t4Draw) t4AnimFrame = requestAnimationFrame(t4Draw);
+	},
+	onDeactivate: () => {
+		if (t4Resize) window.removeEventListener("resize", t4Resize);
+		if (t4AnimFrame) cancelAnimationFrame(t4AnimFrame);
+	},
 	init: () => {
 		const canvas = document.getElementById("t4-canvas");
 		if (!canvas) return;
 		const ctx = canvas.getContext("2d");
 
-		// Cancel any previous animation loop when theme is re-initialized
-		if (window.ThemeManager._t4AnimFrame) cancelAnimationFrame(window.ThemeManager._t4AnimFrame);
-
 		// --- Canvas Setup ---
-		const resize = () => {
+		t4Resize = () => {
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
 		};
-		resize();
-		window.removeEventListener("resize", window.ThemeManager._t4Resize);
-		window.ThemeManager._t4Resize = resize;
-		window.addEventListener("resize", window.ThemeManager._t4Resize);
+		t4Resize();
 
 		// --- Pre-computed Color Data ---
 		// Store as hex strings (set once) + use globalAlpha for opacity
@@ -99,16 +105,10 @@ window.ThemeManager.register({
 		const FRAME_INTERVAL = 1000 / 30; // ~33ms between draws
 		let accumulator = 0;
 
-		const draw = (now) => {
+		t4Draw = (now) => {
 			const elapsed = now - lastTime;
 			lastTime = now;
 			accumulator += elapsed;
-
-			// Pause animation and skip drawing when theme is inactive
-			if (!document.body.classList.contains("theme-twinkling-night")) {
-				window.ThemeManager._t4AnimFrame = requestAnimationFrame(draw);
-				return;
-			}
 
 			// Only draw when enough time has passed for a 30fps frame
 			if (accumulator >= FRAME_INTERVAL) {
@@ -162,9 +162,7 @@ window.ThemeManager.register({
 				ctx.globalAlpha = 1;
 			}
 
-			window.ThemeManager._t4AnimFrame = requestAnimationFrame(draw);
+			t4AnimFrame = requestAnimationFrame(t4Draw);
 		};
-
-		window.ThemeManager._t4AnimFrame = requestAnimationFrame(draw);
 	},
 });

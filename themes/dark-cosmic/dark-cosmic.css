@@ -1,12 +1,14 @@
 /* =============================================================
    DARK COSMIC
    ============================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Space+Grotesk:wght@300;400;600&display=swap');
+
 body.theme-dark-cosmic {
 	background-color: #020205;
 	color: #fff;
 	font-family: "Outfit", sans-serif;
 }
-body.theme-dark-cosmic .theme-1-bg {
+body.theme-dark-cosmic .theme-dark-cosmic-bg {
 	position: fixed;
 	top: -5%;
 	left: -5%;
@@ -17,14 +19,14 @@ body.theme-dark-cosmic .theme-1-bg {
 	pointer-events: none;
 	transition: transform 0.2s ease-out;
 }
-body.theme-dark-cosmic .theme-1-stars-container {
+body.theme-dark-cosmic .theme-dark-cosmic-stars-container {
 	position: fixed;
 	z-index: 3;
 	width: 100%;
 	height: 100%;
 	pointer-events: none;
 }
-body.theme-dark-cosmic .theme-1-stars {
+body.theme-dark-cosmic .theme-dark-cosmic-stars {
 	box-shadow: 0 0 transparent; /* Initialized in JS */
 	width: 1px;
 	height: 1px;
@@ -33,7 +35,7 @@ body.theme-dark-cosmic .theme-1-stars {
 	will-change: transform;
 	contain: layout style;
 }
-body.theme-dark-cosmic .theme-1-stars-fast {
+body.theme-dark-cosmic .theme-dark-cosmic-stars-fast {
 	box-shadow: 0 0 transparent; /* Initialized in JS */
 	width: 2px;
 	height: 2px;
@@ -50,7 +52,7 @@ body.theme-dark-cosmic .theme-1-stars-fast {
 		transform: translateY(-2000px);
 	}
 }
-body.theme-dark-cosmic .theme-1-orbs {
+body.theme-dark-cosmic .theme-dark-cosmic-orbs {
 	position: fixed;
 	top: 0;
 	left: 0;

@@ -1,12 +1,14 @@
 /* =============================================================
    AURORA GLOW
    ============================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Gilda+Display&family=Inter:wght@300;400&display=swap');
+
 body.theme-aurora-glow {
 	background-color: #030a08;
 	color: #d1e8e2;
 	font-family: "Gilda Display", serif;
 }
-body.theme-aurora-glow .theme-3-aurora {
+body.theme-aurora-glow .theme-aurora-glow-container {
 	position: fixed;
 	top: 0;
 	left: 0;
