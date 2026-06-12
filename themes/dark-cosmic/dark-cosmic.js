@@ -8,7 +8,7 @@ window.ThemeManager.register({
             <div class="glowing-orb"></div>
             <div class="glowing-orb-2"></div>
         </div>
-        <div style="position:fixed; z-index:3; width:100%; height:100%; pointer-events:none;">
+        <div class="theme-1-stars-container">
             <div class="theme-1-stars" id="tc-s1"></div>
             <div class="theme-1-stars-fast" id="tc-s2"></div>
         </div>

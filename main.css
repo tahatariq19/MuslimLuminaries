@@ -7,7 +7,6 @@ html {
 	height: 100%;
 	overflow: hidden; /* NO native browser scrollbars ever */
 	cursor: pointer;
-	scroll-behavior: smooth;
 }
 
 /* Essential Accessibility Class */
@@ -65,6 +64,16 @@ html {
 }
 #quote-text::-webkit-scrollbar {
 	display: none;
+}
+
+#quote-text[data-length="short"] {
+	font-size: clamp(1.5rem, 4.5vw, 3.5rem);
+}
+#quote-text[data-length="medium"] {
+	font-size: clamp(1.2rem, 3vw, 2.5rem);
+}
+#quote-text[data-length="long"] {
+	font-size: clamp(1rem, 2.5vw, 2rem);
 }
 
 #quote-author {
@@ -140,4 +149,16 @@ html {
 /* DOM injection layers */
 .layer {
 	display: none;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
 }

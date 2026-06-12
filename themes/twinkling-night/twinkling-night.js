@@ -21,7 +21,9 @@ window.ThemeManager.register({
 			canvas.height = window.innerHeight;
 		};
 		resize();
-		window.addEventListener("resize", resize);
+		window.removeEventListener("resize", window.t4Resize);
+		window.t4Resize = resize;
+		window.addEventListener("resize", window.t4Resize);
 
 		// --- Pre-computed Color Data ---
 		// Store as hex strings (set once) + use globalAlpha for opacity
@@ -101,6 +103,12 @@ window.ThemeManager.register({
 			const elapsed = now - lastTime;
 			lastTime = now;
 			accumulator += elapsed;
+
+			// Pause animation and skip drawing when theme is inactive
+			if (!document.body.classList.contains("theme-twinkling-night")) {
+				window.t4AnimFrame = requestAnimationFrame(draw);
+				return;
+			}
 
 			// Only draw when enough time has passed for a 30fps frame
 			if (accumulator >= FRAME_INTERVAL) {

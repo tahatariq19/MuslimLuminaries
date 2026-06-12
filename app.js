@@ -83,6 +83,7 @@ let animating = false;
 
 // === Theme Management System ===
 window.ThemeManager = {
+	availableThemes: ['twinkling-night', 'glass-mesh', 'dark-cosmic', 'aurora-glow'],
 	themes: [],
 	currentThemeIndex: 0,
 	isInitialized: false,
@@ -90,25 +91,44 @@ window.ThemeManager = {
 	register: function (themeConfig) {
 		console.log("Registering theme:", themeConfig.id);
 		this.themes.push(themeConfig);
-		// If app already DOM loaded, try to init
-		if (
-			document.readyState === "complete" ||
-			document.readyState === "interactive"
-		) {
-			this.initAll();
+
+		// Inject layer for the newly loaded theme
+		const bgContainer = document.getElementById("backgrounds-container");
+		if (bgContainer) {
+			const layer = document.createElement("div");
+			layer.className = `layer l-${themeConfig.id}`;
+			if (themeConfig.html) layer.innerHTML = themeConfig.html;
+			bgContainer.appendChild(layer);
+			if (themeConfig.init) themeConfig.init();
 		}
+	},
+
+	loadTheme: function (themeId) {
+		return new Promise((resolve) => {
+			if (this.themes.find(t => t.id === themeId)) return resolve();
+
+			let loaded = 0;
+			const check = () => { if (++loaded === 2) resolve(); };
+
+			const link = document.createElement("link");
+			link.rel = "stylesheet";
+			link.href = `themes/${themeId}/${themeId}.css`;
+			link.onload = link.onerror = check;
+			document.head.appendChild(link);
+
+			const script = document.createElement("script");
+			script.src = `themes/${themeId}/${themeId}.js`;
+			script.onload = script.onerror = check;
+			document.body.appendChild(script);
+		});
 	},
 
 	genStarsBoxShadow: (count, size, baseOpacity, colorful) => {
 		let shadows = "";
 		const colors = ["#ffffff", "#ffe9e9", "#e8eaff", "#fff0fb"];
 		for (let i = 0; i < count; i++) {
-			const x = Math.floor(
-				Math.random() * window.innerWidth * (colorful ? 1 : 1.5),
-			);
-			const y = Math.floor(
-				Math.random() * window.innerHeight * (colorful ? 1 : 2),
-			);
+			const x = (Math.random() * (colorful ? 100 : 150)).toFixed(2);
+			const y = (Math.random() * (colorful ? 100 : 200)).toFixed(2);
 			const op = (Math.random() * 0.5 + baseOpacity).toFixed(2);
 			const color = colorful
 				? colors[Math.floor(Math.random() * colors.length)]
@@ -116,34 +136,41 @@ window.ThemeManager = {
 			const hexOp = Math.floor(op * 255)
 				.toString(16)
 				.padStart(2, "0");
-			shadows += `${x}px ${y}px 0 ${Math.random() * size}px ${
+			shadows += `${x}vw ${y}vh 0 ${Math.random() * size}px ${
 				colorful ? color + hexOp : `rgba(255,255,255,${op})`
 			}${i < count - 1 ? "," : ""}`;
 		}
 		return shadows;
 	},
 
-	initAll: function () {
-		if (this.isInitialized || this.themes.length === 0) return;
+	initAll: async function () {
+		if (this.isInitialized) return;
+		this.isInitialized = true;
 
 		const bgContainer = document.getElementById("backgrounds-container");
-		if (!bgContainer) return;
+		if (bgContainer) bgContainer.innerHTML = "";
 
-		this.isInitialized = true;
-		bgContainer.innerHTML = ""; // Clear
+		const savedThemeId = localStorage.getItem("lastSelectedTheme");
+		let targetThemeId = savedThemeId;
+		if (!this.availableThemes.includes(targetThemeId)) {
+			targetThemeId = "twinkling-night";
+		}
+		this.currentThemeIndex = this.availableThemes.indexOf(targetThemeId);
 
-		// Inject theme html layers
-		this.themes.forEach((t) => {
-			const layer = document.createElement("div");
-			layer.className = `layer l-${t.id}`;
-			if (t.html) layer.innerHTML = t.html;
-			bgContainer.appendChild(layer);
-			if (t.init) t.init();
-		});
+		await this.loadTheme(targetThemeId);
+		this.switchTheme();
+		triggerNextQuote();
+
+		// Silently pre-fetch remaining themes
+		setTimeout(() => {
+			this.availableThemes.forEach(id => {
+				if (id !== targetThemeId) this.loadTheme(id);
+			});
+		}, 1000);
 
 		// Parallax handler
 		document.addEventListener("mousemove", (e) => {
-			const activeTheme = this.themes[this.currentThemeIndex];
+			const activeTheme = this.getActiveTheme();
 			if (activeTheme?.onMouseMove) {
 				activeTheme.onMouseMove(
 					e.clientX / window.innerWidth,
@@ -151,36 +178,14 @@ window.ThemeManager = {
 				);
 			}
 		});
-
-		// Theme Priority:
-		// 1. Saved theme from localStorage
-		// 2. Default theme 'twinkling-night'
-		// 3. First registered theme
-		const savedThemeId = localStorage.getItem("lastSelectedTheme");
-		let targetIndex = -1;
-
-		if (savedThemeId) {
-			targetIndex = this.themes.findIndex((t) => t.id === savedThemeId);
-		}
-
-		if (targetIndex === -1) {
-			targetIndex = this.themes.findIndex((t) => t.id === "twinkling-night");
-		}
-
-		this.currentThemeIndex = targetIndex !== -1 ? targetIndex : 0;
-
-		this.switchTheme();
-		triggerNextQuote();
 	},
 
 	switchTheme: function () {
-		if (this.themes.length === 0) return;
-		const activeTheme = this.themes[this.currentThemeIndex];
+		const targetThemeId = this.availableThemes[this.currentThemeIndex];
+		const activeTheme = this.themes.find(t => t.id === targetThemeId);
 		if (!activeTheme) return;
 
 		document.body.className = `theme-${activeTheme.id}`;
-
-		// Persist the theme choice
 		localStorage.setItem("lastSelectedTheme", activeTheme.id);
 
 		const toast = document.getElementById("theme-toast");
@@ -200,16 +205,19 @@ window.ThemeManager = {
 		}
 	},
 
-	nextTheme: function () {
-		if (this.themes.length === 0) return;
+	nextTheme: async function () {
 		this.currentThemeIndex++;
-		if (this.currentThemeIndex >= this.themes.length)
+		if (this.currentThemeIndex >= this.availableThemes.length) {
 			this.currentThemeIndex = 0;
+		}
+		const targetThemeId = this.availableThemes[this.currentThemeIndex];
+		await this.loadTheme(targetThemeId);
 		this.switchTheme();
 	},
 
 	getActiveTheme: function () {
-		return this.themes[this.currentThemeIndex] || { useTilde: false };
+		const targetThemeId = this.availableThemes[this.currentThemeIndex];
+		return this.themes.find(t => t.id === targetThemeId) || { useTilde: false };
 	},
 };
 
@@ -248,11 +256,11 @@ function updateContent() {
 
 	const charCount = quote.text.length;
 	if (charCount > 300) {
-		qLine.style.fontSize = "clamp(1rem, 2.5vw, 2rem)";
+		qLine.setAttribute('data-length', 'long');
 	} else if (charCount > 150) {
-		qLine.style.fontSize = "clamp(1.2rem, 3vw, 2.5rem)";
+		qLine.setAttribute('data-length', 'medium');
 	} else {
-		qLine.style.fontSize = "clamp(1.5rem, 4.5vw, 3.5rem)";
+		qLine.setAttribute('data-length', 'short');
 	}
 
 	setTimeout(() => (animating = false), 500);

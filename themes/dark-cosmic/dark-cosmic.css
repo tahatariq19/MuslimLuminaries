@@ -1,5 +1,5 @@
 /* =============================================================
-   THEME 1: DARK COSMIC
+   DARK COSMIC
    ============================================================= */
 body.theme-dark-cosmic {
 	background-color: #020205;
@@ -16,6 +16,13 @@ body.theme-dark-cosmic .theme-1-bg {
 	z-index: 1;
 	pointer-events: none;
 	transition: transform 0.2s ease-out;
+}
+body.theme-dark-cosmic .theme-1-stars-container {
+	position: fixed;
+	z-index: 3;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
 }
 body.theme-dark-cosmic .theme-1-stars {
 	box-shadow: 0 0 transparent; /* Initialized in JS */

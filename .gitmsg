@@ -1,0 +1,12 @@
+refactor: comprehensive performance, SEO, and styling audit fixes
+
+- perf: eliminate unused Tailwind CSS CDN script (~300KB)
+- perf: lazy load theme CSS/JS to improve initial load time
+- perf: pause twinkling-night canvas animation when inactive
+- seo: add meta description, Open Graph tags, and Twitter cards
+- feat: add new textless geometric favicon
+- feat: make dark-cosmic stars responsive using viewport units (vw/vh)
+- a11y: add prefers-reduced-motion support
+- fix: ensure twinkling-night resize listener cleans up properly
+- style: replace JS inline font sizes with data-attributes for better theme overrides
+- chore: expand .gitignore and clean up legacy CSS comments
