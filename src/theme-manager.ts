@@ -1,4 +1,4 @@
-import type { ThemeConfig } from './types.ts'
+import type { ThemeConfig } from './types'
 
 // Static map of theme id -> dynamic import. Each theme module imports its own
 // CSS, so loading the module injects the stylesheet (Vite handles code-splitting
@@ -11,11 +11,11 @@ const themeLoaders: Record<string, () => Promise<{ default: ThemeConfig }>> = {
 }
 
 class ThemeManager {
-	availableThemes = ['twinkling-night', 'glass-mesh', 'dark-cosmic', 'aurora-glow']
-	themes: ThemeConfig[] = []
-	currentThemeIndex = 0
-	activeThemeId: string | null = null
-	isInitialized = false
+	private availableThemes = ['twinkling-night', 'glass-mesh', 'dark-cosmic', 'aurora-glow']
+	private themes: ThemeConfig[] = []
+	private currentThemeIndex = 0
+	private activeThemeId: string | null = null
+	private isInitialized = false
 	private toastTimer: ReturnType<typeof setTimeout> | undefined
 
 	register(themeConfig: ThemeConfig) {

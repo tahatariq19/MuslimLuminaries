@@ -176,6 +176,7 @@ const theme: ThemeConfig = {
 				ctx.globalAlpha = 1
 			}
 
+			// t4Draw is guaranteed to be defined when this animation loop callback executes
 			t4AnimFrame = requestAnimationFrame(t4Draw!)
 		}
 	},
