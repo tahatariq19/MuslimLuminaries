@@ -1,4 +1,7 @@
-window.ThemeManager.register({
+import './aurora-glow.css'
+import type { ThemeConfig } from '../types'
+
+const theme: ThemeConfig = {
 	id: "aurora-glow",
 	name: "Aurora Glow",
 	useTilde: false,
@@ -10,4 +13,6 @@ window.ThemeManager.register({
             <div class="light-beam b3"></div>
         </div>
     `,
-});
+}
+
+export default theme
