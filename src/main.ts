@@ -38,8 +38,9 @@ function updateContent() {
 	qAuth.innerText = activeTheme.useTilde ? `~ ${quote.author}` : quote.author
 
 	container.classList.remove('exit')
-	void container.offsetWidth // trigger reflow
-	container.classList.add('active')
+	requestAnimationFrame(() => {
+		container.classList.add('active')
+	})
 
 	const charCount = quote.text.length
 	if (charCount > 300) {
