@@ -119,6 +119,13 @@ const theme: ThemeConfig = {
 			stars.push(createStar(true))
 		}
 
+		// --- Reduced Motion Cache ---
+		const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+		let prefersReducedMotion = reducedMotionQuery.matches
+		reducedMotionQuery.addEventListener('change', e => {
+			prefersReducedMotion = e.matches
+		})
+
 		// --- Render Loop (throttled to ~30fps) ---
 		let lastTime = performance.now()
 		const FRAME_INTERVAL = 1000 / 30 // ~33ms between draws
@@ -182,9 +189,6 @@ const theme: ThemeConfig = {
 			}
 
 			// Respect prefers-reduced-motion preference
-			const prefersReducedMotion = window.matchMedia(
-				'(prefers-reduced-motion: reduce)',
-			).matches
 			if (!prefersReducedMotion && t4Draw) {
 				t4AnimFrame = requestAnimationFrame(t4Draw)
 			}

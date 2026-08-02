@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Muslim Luminaries - Quote Experience</title>
+    <meta name="theme-color" content="#030408">
     <link rel="icon" type="image/png" href="./favicon.png">
-    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="canonical" href="https://tahatariq19.github.io/MuslimLuminaries/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Inter:wght@300;400&family=Outfit:wght@300;400;600&family=Plus+Jakarta+Sans:wght@300;400;600&family=Space+Grotesk:wght@300;400;600&display=swap" crossorigin="anonymous">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Inter:wght@300;400&family=Outfit:wght@300;400;600&family=Plus+Jakarta+Sans:wght@300;400;600&family=Space+Grotesk:wght@300;400;600&display=swap" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Inter:wght@300;400&family=Outfit:wght@300;400;600&family=Plus+Jakarta+Sans:wght@300;400;600&family=Space+Grotesk:wght@300;400;600&display=swap" media="print" onload="this.media='all'" crossorigin="anonymous">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Inter:wght@300;400&family=Outfit:wght@300;400;600&family=Plus+Jakarta+Sans:wght@300;400;600&family=Space+Grotesk:wght@300;400;600&display=swap" crossorigin="anonymous"></noscript>
     <meta name="description" content="A visually engaging website that displays inspirational quotes from Muslim scholars, thinkers, and philosophers.">
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="Muslim Luminaries - Quote Experience">
@@ -18,9 +21,14 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tahatariq19.github.io/MuslimLuminaries/">
     <meta property="og:image" content="https://tahatariq19.github.io/MuslimLuminaries/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Muslim Luminaries - Quote Experience">
+    <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Muslim Luminaries - Quote Experience">
     <meta name="twitter:image" content="https://tahatariq19.github.io/MuslimLuminaries/og-image.jpg">
+    <meta name="twitter:image:alt" content="Muslim Luminaries - Quote Experience">
     <meta name="twitter:description" content="A visually engaging website that displays inspirational quotes from Muslim scholars, thinkers, and philosophers.">
 
     <script type="application/ld+json">
@@ -42,7 +50,7 @@
     <div id="backgrounds-container"></div>
 
     <!-- Actual Content -->
-    <main id="quote-container" tabindex="-1" aria-live="polite" aria-keyshortcuts="Space Enter" title="Click or press Space / Enter for next quote">
+    <main id="quote-container" tabindex="-1" aria-live="polite" aria-keyshortcuts="Space Enter KeyT" title="Click or press Space, Enter, or T for next quote or theme">
         <blockquote id="quote-text"></blockquote>
         <cite id="quote-author"></cite>
     </main>

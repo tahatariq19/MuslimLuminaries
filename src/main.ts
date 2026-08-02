@@ -8,14 +8,20 @@ quoteManager.init(quotes)
 let isFirstLoad = true
 let animating = false
 
+let containerEl: HTMLElement | null = null
+let qLineEl: HTMLElement | null = null
+let qAuthEl: HTMLElement | null = null
+
 function triggerNextQuote() {
-	const container = document.getElementById('quote-container')
-	if (animating || !container) return
+	if (!containerEl) {
+		containerEl = document.getElementById('quote-container')
+	}
+	if (animating || !containerEl) return
 	animating = true
 
 	if (!isFirstLoad) {
-		container.classList.remove('active')
-		container.classList.add('exit')
+		containerEl.classList.remove('active')
+		containerEl.classList.add('exit')
 		setTimeout(updateContent, 400) // Wait for exit
 	} else {
 		isFirstLoad = false
@@ -24,37 +30,41 @@ function triggerNextQuote() {
 }
 
 function updateContent() {
-	const qLine = document.getElementById('quote-text')
-	const qAuth = document.getElementById('quote-author')
-	const container = document.getElementById('quote-container')
-	if (!qLine || !qAuth || !container) return
+	if (!qLineEl) qLineEl = document.getElementById('quote-text')
+	if (!qAuthEl) qAuthEl = document.getElementById('quote-author')
+	if (!containerEl) containerEl = document.getElementById('quote-container')
+	if (!qLineEl || !qAuthEl || !containerEl) return
 
 	const quote = quoteManager.next()
 	if (!quote) return
 
-	qLine.innerText = `"${quote.text}"`
+	qLineEl.textContent = `"${quote.text}"`
 
 	const activeTheme = themeManager.getActiveTheme()
-	qAuth.innerText = activeTheme.useTilde ? `~ ${quote.author}` : quote.author
+	qAuthEl.textContent = activeTheme.useTilde ? `~ ${quote.author}` : quote.author
 
-	container.classList.remove('exit')
+	containerEl.classList.remove('exit')
 	requestAnimationFrame(() => {
-		container.classList.add('active')
+		containerEl?.classList.add('active')
 	})
 
 	const charCount = quote.text.length
 	if (charCount > 300) {
-		qLine.setAttribute('data-length', 'long')
+		qLineEl.setAttribute('data-length', 'long')
 	} else if (charCount > 150) {
-		qLine.setAttribute('data-length', 'medium')
+		qLineEl.setAttribute('data-length', 'medium')
 	} else {
-		qLine.setAttribute('data-length', 'short')
+		qLineEl.setAttribute('data-length', 'short')
 	}
 
 	setTimeout(() => (animating = false), 500)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+	containerEl = document.getElementById('quote-container')
+	qLineEl = document.getElementById('quote-text')
+	qAuthEl = document.getElementById('quote-author')
+
 	// Theme Toggle Listener
 	const themeBtn = document.getElementById('theme-btn')
 	if (themeBtn) {
@@ -72,18 +82,22 @@ document.addEventListener('DOMContentLoaded', () => {
 		triggerNextQuote()
 	})
 	document.addEventListener('keydown', e => {
-		if (e.code === 'Space' || e.code === 'Enter') {
-			const activeEl = document.activeElement
-			const isInteractive =
-				activeEl &&
-				(activeEl.tagName === 'BUTTON' ||
-					activeEl.tagName === 'A' ||
-					activeEl.tagName === 'INPUT' ||
-					activeEl.tagName === 'TEXTAREA' ||
-					activeEl.tagName === 'SELECT')
-			if (!isInteractive) triggerNextQuote()
+		const activeEl = document.activeElement as HTMLElement | null
+		const isInteractive =
+			activeEl &&
+			(activeEl.tagName === 'BUTTON' ||
+				activeEl.tagName === 'A' ||
+				activeEl.tagName === 'INPUT' ||
+				activeEl.tagName === 'TEXTAREA' ||
+				activeEl.tagName === 'SELECT' ||
+				activeEl.isContentEditable)
+
+		if ((e.code === 'Space' || e.code === 'Enter') && !isInteractive) {
+			triggerNextQuote()
 		}
-		if (e.code === 'KeyT') themeManager.nextTheme()
+		if ((e.code === 'KeyT' || e.key === 't' || e.key === 'T') && !isInteractive) {
+			themeManager.nextTheme()
+		}
 	})
 
 	// Initial check — themeManager.initAll loads the saved theme, then triggers

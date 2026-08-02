@@ -1,4 +1,10 @@
 /* Base Reset & Setup */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
 body,
 html {
 	margin: 0;
@@ -6,6 +12,13 @@ html {
 	width: 100%;
 	height: 100%;
 	overflow: hidden; /* NO native browser scrollbars ever */
+}
+
+#backgrounds-container {
+	position: fixed;
+	inset: 0;
+	contain: layout style paint;
+	pointer-events: none;
 }
 
 /* Essential Accessibility Class */
@@ -52,17 +65,14 @@ html {
 	height: 100vh;
 	width: 100vw;
 	padding: 3rem 5vw; /* Breathing room */
-	box-sizing: border-box;
 	transition:
-		opacity 0.5s ease,
-		transform 0.5s ease,
-		filter 0.5s ease;
+		opacity 0.4s ease,
+		transform 0.4s ease;
 	background: transparent;
 	box-shadow: none;
 	backdrop-filter: none;
 	opacity: 0;
 	transform: scale(0.98);
-	filter: blur(10px);
 	cursor: pointer;
 }
 #quote-container:focus-visible {
@@ -173,13 +183,13 @@ html {
 #quote-container.active {
 	opacity: 1;
 	transform: scale(1);
-	filter: blur(0px);
 }
 #quote-container.exit {
 	opacity: 0;
 	transform: scale(1.02);
-	filter: blur(10px);
-	transition: all 0.4s ease;
+	transition:
+		opacity 0.4s ease,
+		transform 0.4s ease;
 }
 
 /* DOM injection layers */

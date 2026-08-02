@@ -63,17 +63,19 @@ class ThemeManager {
 		this.isInitialized = true
 
 		const bgContainer = document.getElementById('backgrounds-container')
-		if (bgContainer) bgContainer.innerHTML = ''
+		if (bgContainer) bgContainer.replaceChildren()
 
 		const savedThemeId = this.getSavedTheme()
-		let targetThemeId = savedThemeId
-		if (!this.availableThemes.includes(targetThemeId as string)) {
-			targetThemeId = 'twinkling-night'
-		}
-		this.currentThemeIndex = this.availableThemes.indexOf(targetThemeId as string)
+		let targetThemeId =
+			savedThemeId && this.availableThemes.includes(savedThemeId)
+				? savedThemeId
+				: 'twinkling-night'
 
-		await this.loadTheme(targetThemeId as string).catch(() => {
+		this.currentThemeIndex = this.availableThemes.indexOf(targetThemeId)
+
+		await this.loadTheme(targetThemeId).catch(() => {
 			console.warn(`Failed to load theme "${targetThemeId}", falling back to default.`)
+			targetThemeId = 'twinkling-night'
 			this.currentThemeIndex = 0
 			return this.loadTheme(this.availableThemes[0])
 		})
@@ -83,7 +85,11 @@ class ThemeManager {
 		// Silently pre-fetch remaining themes
 		setTimeout(() => {
 			this.availableThemes.forEach(id => {
-				if (id !== targetThemeId) this.loadTheme(id).catch(() => {})
+				if (id !== targetThemeId) {
+					this.loadTheme(id).catch(err => {
+						console.warn(`Failed to preload theme "${id}":`, err)
+					})
+				}
 			})
 		}, 1000)
 
@@ -130,7 +136,7 @@ class ThemeManager {
 
 		const toast = document.getElementById('theme-toast')
 		if (toast) {
-			toast.innerText = activeTheme.name
+			toast.textContent = activeTheme.name
 			toast.classList.add('show')
 			clearTimeout(this.toastTimer)
 			this.toastTimer = setTimeout(() => toast.classList.remove('show'), 2000)
@@ -148,7 +154,9 @@ class ThemeManager {
 			this.currentThemeIndex = 0
 		}
 		const targetThemeId = this.availableThemes[this.currentThemeIndex]
-		await this.loadTheme(targetThemeId).catch(() => {})
+		await this.loadTheme(targetThemeId).catch(err => {
+			console.warn(`Failed to load next theme "${targetThemeId}":`, err)
+		})
 		this.switchTheme()
 	}
 

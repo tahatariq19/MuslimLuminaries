@@ -18,7 +18,7 @@ body.theme-glass-mesh .theme-glass-mesh-blobs {
 	opacity: 0.65;
 	animation: breatheT2 10s ease-in-out infinite alternate;
 	pointer-events: none;
-	will-change: transform, opacity, filter;
+	will-change: transform, opacity;
 }
 @keyframes breatheT2 {
 	0% {
