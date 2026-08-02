@@ -1,7 +1,6 @@
 /* =============================================================
    GLASS MESH
    ============================================================= */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&display=swap');
 
 body.theme-glass-mesh {
 	background-color: #0c0a0f;
@@ -89,4 +88,11 @@ body.theme-glass-mesh #quote-author {
 }
 body.theme-glass-mesh .layer.l-glass-mesh {
 	display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body.theme-glass-mesh .theme-glass-mesh-blobs,
+	body.theme-glass-mesh .glass-mesh-blob {
+		animation: none;
+	}
 }

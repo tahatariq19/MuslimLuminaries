@@ -1,7 +1,6 @@
 /* =============================================================
    DARK COSMIC
    ============================================================= */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Space+Grotesk:wght@300;400;600&display=swap');
 
 body.theme-dark-cosmic {
 	background-color: #020205;
@@ -140,4 +139,13 @@ body.theme-dark-cosmic:hover #quote-author::before {
 }
 body.theme-dark-cosmic .layer.l-dark-cosmic {
 	display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body.theme-dark-cosmic .theme-dark-cosmic-stars,
+	body.theme-dark-cosmic .theme-dark-cosmic-stars-fast,
+	body.theme-dark-cosmic .glowing-orb,
+	body.theme-dark-cosmic .glowing-orb-2 {
+		animation: none;
+	}
 }

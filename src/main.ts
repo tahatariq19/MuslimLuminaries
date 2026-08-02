@@ -66,6 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Interaction Events
 	document.body.addEventListener('click', (e) => {
 		if ((e.target as HTMLElement).closest('.theme-toggle-btn')) return
+		const selection = window.getSelection()
+		if (selection && selection.toString().trim().length > 0) return
 		triggerNextQuote()
 	})
 	document.addEventListener('keydown', (e) => {

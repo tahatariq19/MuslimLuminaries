@@ -72,13 +72,20 @@ class ThemeManager {
 		}, 1000)
 
 		// Parallax handler
+		let ticking = false
 		document.addEventListener('mousemove', (e) => {
-			const activeTheme = this.getActiveTheme()
-			if (activeTheme?.onMouseMove) {
-				activeTheme.onMouseMove(
-					e.clientX / window.innerWidth,
-					e.clientY / window.innerHeight,
-				)
+			if (!ticking) {
+				requestAnimationFrame(() => {
+					const activeTheme = this.getActiveTheme()
+					if (activeTheme?.onMouseMove) {
+						activeTheme.onMouseMove(
+							e.clientX / window.innerWidth,
+							e.clientY / window.innerHeight,
+						)
+					}
+					ticking = false
+				})
+				ticking = true
 			}
 		})
 	}

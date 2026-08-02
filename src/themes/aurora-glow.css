@@ -1,7 +1,6 @@
 /* =============================================================
    AURORA GLOW
    ============================================================= */
-@import url('https://fonts.googleapis.com/css2?family=Gilda+Display&family=Inter:wght@300;400&display=swap');
 
 body.theme-aurora-glow {
 	background-color: #030a08;
@@ -103,4 +102,10 @@ body.theme-aurora-glow #quote-author::after {
 }
 body.theme-aurora-glow .layer.l-aurora-glow {
 	display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body.theme-aurora-glow .light-beam {
+		animation: none;
+	}
 }
