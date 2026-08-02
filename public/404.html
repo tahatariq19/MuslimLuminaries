@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Muslim Luminaries - Page redirect">
     <meta name="robots" content="noindex, follow">
-    <title>Muslim Luminaries</title>
-    <meta http-equiv="refresh" content="0; url=./">
+    <title>Muslim Luminaries - Redirecting...</title>
     <script>
         // GitHub Pages serves this for any 404 under the project. Redirect to
-        // the project root (the first path segment), which hosts the app.
+        // the project root while preserving pathname, search params, and hash.
         (function () {
             const l = window.location
-            const base = '/' + l.pathname.split('/')[1] + '/'
-            l.replace(base)
+            const base = '/' + (l.pathname.split('/')[1] || '') + '/'
+            l.replace(base + l.search + l.hash)
         })()
     </script>
 </head>
@@ -24,3 +23,4 @@
     </main>
 </body>
 </html>
+

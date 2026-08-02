@@ -14,7 +14,7 @@ export const quotes: Quote[] = [
 		author: 'Ibn Taymiyyah',
 	},
 	{
-		text: 'A calamity that makes you turn to Allah is better for you then a blessing which makes you forget the remembrance of Allah.',
+		text: 'A calamity that makes you turn to Allah is better for you than a blessing which makes you forget the remembrance of Allah.',
 		author: 'Ibn Taymiyyah',
 	},
 	{
@@ -214,7 +214,7 @@ export const quotes: Quote[] = [
 		author: 'Saadi',
 	},
 	{
-		text: "He has so many creations, and yet He never forgets me, but I only have One creator, and I've forgotten Him countless of times.",
+		text: "He has so many creations, and yet He never forgets me, but I only have One creator, and I've forgotten Him countless times.",
 		author: 'Saadi',
 	},
 	{

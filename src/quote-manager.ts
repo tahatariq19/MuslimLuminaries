@@ -51,6 +51,16 @@ class QuoteManager {
 			round++
 		}
 
+		const lastAuthor =
+			this.playlist.length > 0 ? this.playlist[this.playlist.length - 1].author : null
+
+		if (lastAuthor && newPlaylist.length > 1 && newPlaylist[0].author === lastAuthor) {
+			const swapIdx = newPlaylist.findIndex(q => q.author !== lastAuthor)
+			if (swapIdx > 0) {
+				;[newPlaylist[0], newPlaylist[swapIdx]] = [newPlaylist[swapIdx], newPlaylist[0]]
+			}
+		}
+
 		this.playlist = newPlaylist
 		// Always start at the top. Randomness comes from the builder itself:
 		// each round shuffles its author order, and each author's quote pool

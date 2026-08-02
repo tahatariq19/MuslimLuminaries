@@ -1,23 +1,28 @@
 {
+  "id": "/MuslimLuminaries/",
   "name": "Muslim Luminaries",
   "short_name": "Luminaries",
   "description": "A visually engaging website that displays inspirational quotes from Muslim scholars, thinkers, and philosophers.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#030408",
   "theme_color": "#030408",
+  "categories": ["lifestyle", "education"],
   "icons": [
     {
       "src": "favicon.png",
-      "sizes": "512x512",
+      "sizes": "64x64",
       "type": "image/png",
       "purpose": "any"
     },
     {
       "src": "apple-touch-icon.png",
-      "sizes": "180x180",
+      "sizes": "64x64",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
+

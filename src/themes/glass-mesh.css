@@ -75,7 +75,9 @@ body.theme-glass-mesh .tb3 {
 body.theme-glass-mesh #quote-text {
 	font-weight: 400;
 	letter-spacing: -0.02em;
-	text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+	text-shadow:
+		0 2px 14px rgba(0, 0, 0, 0.9),
+		0 0 4px rgba(0, 0, 0, 0.95);
 	color: #fff;
 }
 body.theme-glass-mesh #quote-author {
@@ -84,7 +86,8 @@ body.theme-glass-mesh #quote-author {
 	letter-spacing: 0.15em;
 	text-transform: uppercase;
 	color: #fff;
-	opacity: 0.9;
+	text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+	opacity: 0.95;
 }
 body.theme-glass-mesh .layer.l-glass-mesh {
 	display: block;

@@ -48,8 +48,11 @@ html {
 	border-radius: 0 0 8px 0;
 	transition: top 0.2s ease;
 }
-.skip-link:focus {
+.skip-link:focus,
+.skip-link:focus-visible {
 	top: 0;
+	outline: 3px solid #00f0ff;
+	outline-offset: 2px;
 }
 
 /*
@@ -76,8 +79,8 @@ html {
 	cursor: pointer;
 }
 #quote-container:focus-visible {
-	outline: 2px solid rgba(255, 255, 255, 0.8);
-	outline-offset: -8px;
+	outline: 3px solid #00f0ff;
+	outline-offset: -12px;
 	border-radius: 8px;
 }
 
@@ -94,7 +97,7 @@ html {
 
 	/* Thin styled scrollbar (visible when needed) */
 	scrollbar-width: thin;
-	scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+	scrollbar-color: rgba(255, 255, 255, 0.6) transparent;
 }
 #quote-text::-webkit-scrollbar {
 	width: 4px;
@@ -103,7 +106,7 @@ html {
 	background: transparent;
 }
 #quote-text::-webkit-scrollbar-thumb {
-	background: rgba(255, 255, 255, 0.25);
+	background: rgba(255, 255, 255, 0.6);
 	border-radius: 4px;
 }
 

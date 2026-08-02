@@ -76,26 +76,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// Interaction Events
 	document.body.addEventListener('click', e => {
-		if ((e.target as HTMLElement).closest('.theme-toggle-btn')) return
+		const target = e.target as HTMLElement
+		if (
+			target.closest('.theme-toggle-btn') ||
+			target.closest('.skip-link') ||
+			target.closest('a')
+		)
+			return
 		const selection = window.getSelection()
 		if (selection && selection.toString().trim().length > 0) return
 		triggerNextQuote()
 	})
+
 	document.addEventListener('keydown', e => {
+		if (e.ctrlKey || e.altKey || e.metaKey) return
+
 		const activeEl = document.activeElement as HTMLElement | null
-		const isInteractive =
+		const isTextInput =
 			activeEl &&
-			(activeEl.tagName === 'BUTTON' ||
-				activeEl.tagName === 'A' ||
-				activeEl.tagName === 'INPUT' ||
+			(activeEl.tagName === 'INPUT' ||
 				activeEl.tagName === 'TEXTAREA' ||
-				activeEl.tagName === 'SELECT' ||
 				activeEl.isContentEditable)
 
-		if ((e.code === 'Space' || e.code === 'Enter') && !isInteractive) {
+		const isInteractiveButton =
+			activeEl && (activeEl.tagName === 'BUTTON' || activeEl.tagName === 'A')
+
+		if ((e.key === ' ' || e.key === 'Enter') && !isTextInput && !isInteractiveButton) {
+			e.preventDefault()
+			triggerNextQuote()
+		} else if ((e.key === ' ' || e.key === 'Enter') && activeEl?.id === 'quote-container') {
+			e.preventDefault()
 			triggerNextQuote()
 		}
-		if ((e.code === 'KeyT' || e.key === 't' || e.key === 'T') && !isInteractive) {
+
+		if ((e.key === 't' || e.key === 'T') && !isTextInput) {
+			e.preventDefault()
 			themeManager.nextTheme()
 		}
 	})

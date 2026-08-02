@@ -1,9 +1,12 @@
 import './twinkling-night.css'
 import type { ThemeConfig } from '../types'
 
-let t4AnimFrame: number
+let t4AnimFrame = 0
+let t4IsRunning = false
 let t4Resize: (() => void) | undefined
 let t4Draw: ((now: number) => void) | undefined
+let lastTime = performance.now()
+let accumulator = 0
 
 const theme: ThemeConfig = {
 	id: 'twinkling-night',
@@ -15,11 +18,15 @@ const theme: ThemeConfig = {
         <canvas class="theme-twinkling-night-stars" id="t4-canvas"></canvas>
     `,
 	onActivate: () => {
+		t4IsRunning = true
 		if (t4Resize) window.addEventListener('resize', t4Resize)
 		if (t4Draw) {
 			const prefersReducedMotion = window.matchMedia(
 				'(prefers-reduced-motion: reduce)',
 			).matches
+			if (t4AnimFrame) cancelAnimationFrame(t4AnimFrame)
+			lastTime = performance.now()
+			accumulator = 0
 			if (!prefersReducedMotion) {
 				t4AnimFrame = requestAnimationFrame(t4Draw)
 			} else {
@@ -28,8 +35,12 @@ const theme: ThemeConfig = {
 		}
 	},
 	onDeactivate: () => {
+		t4IsRunning = false
 		if (t4Resize) window.removeEventListener('resize', t4Resize)
-		if (t4AnimFrame) cancelAnimationFrame(t4AnimFrame)
+		if (t4AnimFrame) {
+			cancelAnimationFrame(t4AnimFrame)
+			t4AnimFrame = 0
+		}
 	},
 	init: () => {
 		const canvas = document.getElementById('t4-canvas') as HTMLCanvasElement | null
@@ -37,16 +48,15 @@ const theme: ThemeConfig = {
 		const ctx = canvas.getContext('2d')
 		if (!ctx) return
 
-		// --- Canvas Setup ---
+		// --- Canvas Setup (High-DPI Retina Support) ---
 		t4Resize = () => {
-			canvas.width = window.innerWidth
-			canvas.height = window.innerHeight
+			const dpr = window.devicePixelRatio || 1
+			canvas.width = window.innerWidth * dpr
+			canvas.height = window.innerHeight * dpr
 		}
 		t4Resize()
 
 		// --- Pre-computed Color Data ---
-		// Store as hex strings (set once) + use globalAlpha for opacity
-		// This eliminates 450+ rgba() string allocations per frame
 		const colorHex = ['#ffffff', '#ffe9e9', '#e8eaff', '#fff0fb', '#d4eeff']
 
 		const STAR_COUNT = 450
@@ -63,7 +73,6 @@ const theme: ThemeConfig = {
 		}[] = []
 
 		// Pre-compute the 4-point star path as a reusable Path2D
-		// Reduced from 80 to 24 segments — visually identical at these sizes
 		const sparklePathUnit = new Path2D()
 		const steps = 24
 		for (let s = 0; s <= steps; s++) {
@@ -95,7 +104,7 @@ const theme: ThemeConfig = {
 				isSparkle,
 				colorIdx: Math.floor(Math.random() * colorHex.length),
 				lifespan,
-				invLifespan: 1 / lifespan, // Pre-compute division
+				invLifespan: 1 / lifespan,
 				totalCycle,
 				age,
 			}
@@ -127,11 +136,11 @@ const theme: ThemeConfig = {
 		})
 
 		// --- Render Loop (throttled to ~30fps) ---
-		let lastTime = performance.now()
 		const FRAME_INTERVAL = 1000 / 30 // ~33ms between draws
-		let accumulator = 0
 
 		t4Draw = (now: number) => {
+			if (!t4IsRunning) return
+
 			const elapsed = now - lastTime
 			lastTime = now
 			accumulator += elapsed
@@ -139,7 +148,7 @@ const theme: ThemeConfig = {
 			// Only draw when enough time has passed for a 30fps frame
 			if (accumulator >= FRAME_INTERVAL) {
 				const dt = accumulator / 1000
-				accumulator = 0
+				accumulator %= FRAME_INTERVAL
 
 				const w = canvas.width
 				const h = canvas.height
@@ -156,7 +165,7 @@ const theme: ThemeConfig = {
 
 					if (s.age >= s.lifespan) continue
 
-					const progress = s.age * s.invLifespan // Multiply instead of divide
+					const progress = s.age * s.invLifespan
 					const opacity = Math.sin(progress * PI)
 
 					if (opacity < 0.02) continue
@@ -170,12 +179,10 @@ const theme: ThemeConfig = {
 
 					if (s.isSparkle) {
 						const scale = s.baseSize * 0.55 * (0.6 + opacity * 0.5)
-						// Use setTransform instead of save/translate/scale/restore
 						ctx.setTransform(scale, 0, 0, scale, px, py)
 						ctx.fill(sparklePathUnit)
 					} else {
 						const radius = s.baseSize * 0.5 * (0.7 + opacity * 0.3)
-						// Reset transform for arc drawing
 						ctx.setTransform(1, 0, 0, 1, 0, 0)
 						ctx.beginPath()
 						ctx.arc(px, py, radius, 0, TWO_PI)
@@ -188,8 +195,8 @@ const theme: ThemeConfig = {
 				ctx.globalAlpha = 1
 			}
 
-			// Respect prefers-reduced-motion preference
-			if (!prefersReducedMotion && t4Draw) {
+			// Respect prefers-reduced-motion preference and active state
+			if (!prefersReducedMotion && t4IsRunning && t4Draw) {
 				t4AnimFrame = requestAnimationFrame(t4Draw)
 			}
 		}

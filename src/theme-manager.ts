@@ -28,7 +28,16 @@ class ThemeManager {
 			layer.className = `layer l-${themeConfig.id}`
 			if (themeConfig.html) layer.innerHTML = themeConfig.html
 			bgContainer.appendChild(layer)
-			if (themeConfig.init) themeConfig.init()
+			if (themeConfig.init) {
+				try {
+					themeConfig.init()
+				} catch (err) {
+					console.error(
+						`ThemeManager: Error initializing theme "${themeConfig.id}":`,
+						err,
+					)
+				}
+			}
 		}
 	}
 
@@ -93,13 +102,16 @@ class ThemeManager {
 			})
 		}, 1000)
 
-		// Parallax handler
+		// Parallax handler with reduced-motion and active handler check
 		let ticking = false
 		document.addEventListener('mousemove', e => {
+			if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+			const activeTheme = this.getActiveTheme()
+			if (!activeTheme?.onMouseMove) return
+
 			if (!ticking) {
 				requestAnimationFrame(() => {
-					const activeTheme = this.getActiveTheme()
-					if (activeTheme?.onMouseMove) {
+					if (activeTheme.onMouseMove) {
 						activeTheme.onMouseMove(
 							e.clientX / window.innerWidth,
 							e.clientY / window.innerHeight,
@@ -121,7 +133,11 @@ class ThemeManager {
 		if (this.activeThemeId && this.activeThemeId !== activeTheme.id) {
 			const oldTheme = this.themes.find(t => t.id === this.activeThemeId)
 			if (oldTheme?.onDeactivate) {
-				oldTheme.onDeactivate()
+				try {
+					oldTheme.onDeactivate()
+				} catch (err) {
+					console.error(`ThemeManager: Error deactivating theme "${oldTheme.id}":`, err)
+				}
 			}
 		}
 
@@ -131,7 +147,11 @@ class ThemeManager {
 
 		// Activate the new theme
 		if (activeTheme.onActivate) {
-			activeTheme.onActivate()
+			try {
+				activeTheme.onActivate()
+			} catch (err) {
+				console.error(`ThemeManager: Error activating theme "${activeTheme.id}":`, err)
+			}
 		}
 
 		const toast = document.getElementById('theme-toast')
@@ -149,15 +169,15 @@ class ThemeManager {
 	}
 
 	async nextTheme() {
-		this.currentThemeIndex++
-		if (this.currentThemeIndex >= this.availableThemes.length) {
-			this.currentThemeIndex = 0
-		}
-		const targetThemeId = this.availableThemes[this.currentThemeIndex]
-		await this.loadTheme(targetThemeId).catch(err => {
+		const nextIndex = (this.currentThemeIndex + 1) % this.availableThemes.length
+		const targetThemeId = this.availableThemes[nextIndex]
+		try {
+			await this.loadTheme(targetThemeId)
+			this.currentThemeIndex = nextIndex
+			this.switchTheme()
+		} catch (err) {
 			console.warn(`Failed to load next theme "${targetThemeId}":`, err)
-		})
-		this.switchTheme()
+		}
 	}
 
 	getActiveTheme(): ThemeConfig {
