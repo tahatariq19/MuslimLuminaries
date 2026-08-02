@@ -1,6 +1,6 @@
 import './style.css'
-import { quotes } from './quotes'
 import { quoteManager } from './quote-manager'
+import { quotes } from './quotes'
 import { themeManager } from './theme-manager'
 
 quoteManager.init(quotes)
@@ -57,21 +57,31 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Theme Toggle Listener
 	const themeBtn = document.getElementById('theme-btn')
 	if (themeBtn) {
-		themeBtn.addEventListener('click', (e) => {
+		themeBtn.addEventListener('click', e => {
 			e.stopPropagation() // prevent triggering next quote
 			themeManager.nextTheme()
 		})
 	}
 
 	// Interaction Events
-	document.body.addEventListener('click', (e) => {
+	document.body.addEventListener('click', e => {
 		if ((e.target as HTMLElement).closest('.theme-toggle-btn')) return
 		const selection = window.getSelection()
 		if (selection && selection.toString().trim().length > 0) return
 		triggerNextQuote()
 	})
-	document.addEventListener('keydown', (e) => {
-		if (e.code === 'Space' || e.code === 'Enter') triggerNextQuote()
+	document.addEventListener('keydown', e => {
+		if (e.code === 'Space' || e.code === 'Enter') {
+			const activeEl = document.activeElement
+			const isInteractive =
+				activeEl &&
+				(activeEl.tagName === 'BUTTON' ||
+					activeEl.tagName === 'A' ||
+					activeEl.tagName === 'INPUT' ||
+					activeEl.tagName === 'TEXTAREA' ||
+					activeEl.tagName === 'SELECT')
+			if (!isInteractive) triggerNextQuote()
+		}
 		if (e.code === 'KeyT') themeManager.nextTheme()
 	})
 

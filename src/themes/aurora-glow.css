@@ -5,7 +5,7 @@
 body.theme-aurora-glow {
 	background-color: #030a08;
 	color: #d1e8e2;
-	font-family: "Gilda Display", serif;
+	font-family: 'Gilda Display', serif;
 }
 body.theme-aurora-glow .theme-aurora-glow-container {
 	position: fixed;
@@ -81,7 +81,7 @@ body.theme-aurora-glow #quote-text {
 	line-height: 1.3;
 }
 body.theme-aurora-glow #quote-author {
-	font-family: "Inter", sans-serif;
+	font-family: 'Inter', sans-serif;
 	font-size: 0.95rem;
 	font-weight: 400;
 	letter-spacing: 0.2em;
@@ -94,7 +94,7 @@ body.theme-aurora-glow #quote-author {
 }
 body.theme-aurora-glow #quote-author::before,
 body.theme-aurora-glow #quote-author::after {
-	content: "";
+	content: '';
 	height: 1px;
 	width: 30px;
 	background: rgba(136, 199, 184, 0.4);

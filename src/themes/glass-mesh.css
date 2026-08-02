@@ -5,7 +5,7 @@
 body.theme-glass-mesh {
 	background-color: #0c0a0f;
 	color: #fff;
-	font-family: "Plus Jakarta Sans", sans-serif;
+	font-family: 'Plus Jakarta Sans', sans-serif;
 }
 body.theme-glass-mesh .theme-glass-mesh-blobs {
 	position: fixed;

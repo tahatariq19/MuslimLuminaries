@@ -5,7 +5,7 @@
 body.theme-dark-cosmic {
 	background-color: #020205;
 	color: #fff;
-	font-family: "Outfit", sans-serif;
+	font-family: 'Outfit', sans-serif;
 }
 body.theme-dark-cosmic .theme-dark-cosmic-bg {
 	position: fixed;
@@ -103,7 +103,7 @@ body.theme-dark-cosmic .glowing-orb-2 {
 	}
 }
 body.theme-dark-cosmic #quote-text {
-	font-family: "Space Grotesk", sans-serif;
+	font-family: 'Space Grotesk', sans-serif;
 	font-weight: 300;
 	letter-spacing: -0.01em;
 	text-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
@@ -123,7 +123,7 @@ body.theme-dark-cosmic #quote-author {
 	-webkit-text-fill-color: #00f0ff;
 }
 body.theme-dark-cosmic #quote-author::before {
-	content: "";
+	content: '';
 	position: absolute;
 	bottom: -12px;
 	left: 50%;

@@ -6,8 +6,8 @@ let t4Resize: (() => void) | undefined
 let t4Draw: ((now: number) => void) | undefined
 
 const theme: ThemeConfig = {
-	id: "twinkling-night",
-	name: "Twinkling Night",
+	id: 'twinkling-night',
+	name: 'Twinkling Night',
 	useTilde: false,
 	html: `
         <div class="theme-twinkling-night-sky"></div>
@@ -15,9 +15,11 @@ const theme: ThemeConfig = {
         <canvas class="theme-twinkling-night-stars" id="t4-canvas"></canvas>
     `,
 	onActivate: () => {
-		if (t4Resize) window.addEventListener("resize", t4Resize)
+		if (t4Resize) window.addEventListener('resize', t4Resize)
 		if (t4Draw) {
-			const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+			const prefersReducedMotion = window.matchMedia(
+				'(prefers-reduced-motion: reduce)',
+			).matches
 			if (!prefersReducedMotion) {
 				t4AnimFrame = requestAnimationFrame(t4Draw)
 			} else {
@@ -26,13 +28,13 @@ const theme: ThemeConfig = {
 		}
 	},
 	onDeactivate: () => {
-		if (t4Resize) window.removeEventListener("resize", t4Resize)
+		if (t4Resize) window.removeEventListener('resize', t4Resize)
 		if (t4AnimFrame) cancelAnimationFrame(t4AnimFrame)
 	},
 	init: () => {
-		const canvas = document.getElementById("t4-canvas") as HTMLCanvasElement | null
+		const canvas = document.getElementById('t4-canvas') as HTMLCanvasElement | null
 		if (!canvas) return
-		const ctx = canvas.getContext("2d")
+		const ctx = canvas.getContext('2d')
 		if (!ctx) return
 
 		// --- Canvas Setup ---
@@ -45,7 +47,7 @@ const theme: ThemeConfig = {
 		// --- Pre-computed Color Data ---
 		// Store as hex strings (set once) + use globalAlpha for opacity
 		// This eliminates 450+ rgba() string allocations per frame
-		const colorHex = ["#ffffff", "#ffe9e9", "#e8eaff", "#fff0fb", "#d4eeff"]
+		const colorHex = ['#ffffff', '#ffe9e9', '#e8eaff', '#fff0fb', '#d4eeff']
 
 		const STAR_COUNT = 450
 		const stars: {
@@ -79,9 +81,7 @@ const theme: ThemeConfig = {
 
 		const createStar = (isInitial: boolean) => {
 			const isSparkle = Math.random() > 0.94
-			const baseSize = isSparkle
-				? Math.random() * 8 + 4
-				: Math.random() * 1.5 + 0.5
+			const baseSize = isSparkle ? Math.random() * 8 + 4 : Math.random() * 1.5 + 0.5
 
 			const lifespan = 3.5 + Math.random() * 3
 			const sleepAfter = 0.5 + Math.random() * 1.5
@@ -105,9 +105,7 @@ const theme: ThemeConfig = {
 			star.x = Math.random()
 			star.y = Math.random()
 			star.isSparkle = Math.random() > 0.94
-			star.baseSize = star.isSparkle
-				? Math.random() * 8 + 4
-				: Math.random() * 1.5 + 0.5
+			star.baseSize = star.isSparkle ? Math.random() * 8 + 4 : Math.random() * 1.5 + 0.5
 			star.colorIdx = Math.floor(Math.random() * colorHex.length)
 			star.lifespan = 3.5 + Math.random() * 3
 			star.invLifespan = 1 / star.lifespan
@@ -184,7 +182,9 @@ const theme: ThemeConfig = {
 			}
 
 			// Respect prefers-reduced-motion preference
-			const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+			const prefersReducedMotion = window.matchMedia(
+				'(prefers-reduced-motion: reduce)',
+			).matches
 			if (!prefersReducedMotion && t4Draw) {
 				t4AnimFrame = requestAnimationFrame(t4Draw)
 			}

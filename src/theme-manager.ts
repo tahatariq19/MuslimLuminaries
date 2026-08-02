@@ -33,7 +33,7 @@ class ThemeManager {
 	}
 
 	async loadTheme(themeId: string): Promise<void> {
-		if (this.themes.find((t) => t.id === themeId)) return
+		if (this.themes.find(t => t.id === themeId)) return
 
 		const loader = themeLoaders[themeId]
 		if (!loader) throw new Error(`Unknown theme "${themeId}"`)
@@ -66,14 +66,14 @@ class ThemeManager {
 
 		// Silently pre-fetch remaining themes
 		setTimeout(() => {
-			this.availableThemes.forEach((id) => {
+			this.availableThemes.forEach(id => {
 				if (id !== targetThemeId) this.loadTheme(id).catch(() => {})
 			})
 		}, 1000)
 
 		// Parallax handler
 		let ticking = false
-		document.addEventListener('mousemove', (e) => {
+		document.addEventListener('mousemove', e => {
 			if (!ticking) {
 				requestAnimationFrame(() => {
 					const activeTheme = this.getActiveTheme()
@@ -92,12 +92,12 @@ class ThemeManager {
 
 	switchTheme() {
 		const targetThemeId = this.availableThemes[this.currentThemeIndex]
-		const activeTheme = this.themes.find((t) => t.id === targetThemeId)
+		const activeTheme = this.themes.find(t => t.id === targetThemeId)
 		if (!activeTheme) return
 
 		// Clean up the previously active theme
 		if (this.activeThemeId && this.activeThemeId !== activeTheme.id) {
-			const oldTheme = this.themes.find((t) => t.id === this.activeThemeId)
+			const oldTheme = this.themes.find(t => t.id === this.activeThemeId)
 			if (oldTheme?.onDeactivate) {
 				oldTheme.onDeactivate()
 			}
@@ -117,10 +117,7 @@ class ThemeManager {
 			toast.innerText = activeTheme.name
 			toast.classList.add('show')
 			clearTimeout(this.toastTimer)
-			this.toastTimer = setTimeout(
-				() => toast.classList.remove('show'),
-				2000,
-			)
+			this.toastTimer = setTimeout(() => toast.classList.remove('show'), 2000)
 		}
 
 		const container = document.getElementById('quote-container')
@@ -141,7 +138,9 @@ class ThemeManager {
 
 	getActiveTheme(): ThemeConfig {
 		const targetThemeId = this.availableThemes[this.currentThemeIndex]
-		return this.themes.find((t) => t.id === targetThemeId) || { id: '', name: '', useTilde: false }
+		return (
+			this.themes.find(t => t.id === targetThemeId) || { id: '', name: '', useTilde: false }
+		)
 	}
 }
 

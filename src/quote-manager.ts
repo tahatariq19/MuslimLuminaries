@@ -8,7 +8,7 @@ class QuoteManager {
 
 	init(data: Quote[]) {
 		if (!data || !Array.isArray(data) || data.length === 0) {
-			console.error("QuoteManager: No quote data provided or data is empty.")
+			console.error('QuoteManager: No quote data provided or data is empty.')
 			return
 		}
 		this.quotes = data
@@ -26,7 +26,7 @@ class QuoteManager {
 
 	private generatePlaylist() {
 		const quotesByAuthor: Record<string, Quote[]> = {}
-		this.quotes.forEach((q) => {
+		this.quotes.forEach(q => {
 			if (!quotesByAuthor[q.author]) quotesByAuthor[q.author] = []
 			quotesByAuthor[q.author].push(q)
 		})
@@ -40,14 +40,12 @@ class QuoteManager {
 		const newPlaylist: Quote[] = []
 		let round = 0
 
-		while (authors.some((a) => quotesByAuthor[a].length > round)) {
-			let roundAuthors = authors.filter(
-				(a) => quotesByAuthor[a].length > round,
-			)
+		while (authors.some(a => quotesByAuthor[a].length > round)) {
+			let roundAuthors = authors.filter(a => quotesByAuthor[a].length > round)
 
 			// Shuffle authors for this round
 			roundAuthors = this.shuffle(roundAuthors)
-			roundAuthors.forEach((a) => {
+			roundAuthors.forEach(a => {
 				newPlaylist.push(quotesByAuthor[a][round])
 			})
 			round++

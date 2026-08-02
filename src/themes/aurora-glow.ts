@@ -2,8 +2,8 @@ import './aurora-glow.css'
 import type { ThemeConfig } from '../types'
 
 const theme: ThemeConfig = {
-	id: "aurora-glow",
-	name: "Aurora Glow",
+	id: 'aurora-glow',
+	name: 'Aurora Glow',
 	useTilde: false,
 	html: `
         <div class="noise-overlay"></div>

@@ -5,7 +5,7 @@
 body.theme-twinkling-night {
 	background-color: #030408;
 	color: #fff;
-	font-family: "Outfit", sans-serif;
+	font-family: 'Outfit', sans-serif;
 }
 body.theme-twinkling-night .theme-twinkling-night-sky {
 	position: fixed;
@@ -15,12 +15,7 @@ body.theme-twinkling-night .theme-twinkling-night-sky {
 	height: 100%;
 	z-index: 1;
 	pointer-events: none;
-	background: radial-gradient(
-		circle at 50% 120%,
-		#1a0b2e 0%,
-		#080314 50%,
-		#030408 100%
-	);
+	background: radial-gradient(circle at 50% 120%, #1a0b2e 0%, #080314 50%, #030408 100%);
 }
 body.theme-twinkling-night .milky-way {
 	position: fixed;
@@ -51,7 +46,7 @@ body.theme-twinkling-night .theme-twinkling-night-stars {
 	pointer-events: none;
 }
 body.theme-twinkling-night #quote-text {
-	font-family: "Space Grotesk", sans-serif;
+	font-family: 'Space Grotesk', sans-serif;
 	font-weight: 300;
 	letter-spacing: 0.01em;
 	color: #fff;

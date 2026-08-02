@@ -65,6 +65,11 @@ html {
 	filter: blur(10px);
 	cursor: pointer;
 }
+#quote-container:focus-visible {
+	outline: 2px solid rgba(255, 255, 255, 0.8);
+	outline-offset: -8px;
+	border-radius: 8px;
+}
 
 #quote-text {
 	/* Text scales linearly between minimum and maximum viewports */
@@ -92,13 +97,13 @@ html {
 	border-radius: 4px;
 }
 
-#quote-text[data-length="short"] {
+#quote-text[data-length='short'] {
 	font-size: clamp(1.5rem, 4.5vw, 3.5rem);
 }
-#quote-text[data-length="medium"] {
+#quote-text[data-length='medium'] {
 	font-size: clamp(1.2rem, 3vw, 2.5rem);
 }
-#quote-text[data-length="long"] {
+#quote-text[data-length='long'] {
 	font-size: clamp(1rem, 2.5vw, 2rem);
 }
 
@@ -191,5 +196,26 @@ html {
 		animation-iteration-count: 1 !important;
 		transition-duration: 0.01ms !important;
 		scroll-behavior: auto !important;
+	}
+}
+
+/* Print Stylesheet Optimization */
+@media print {
+	.theme-toggle-btn,
+	.theme-name-toast,
+	.skip-link,
+	#backgrounds-container {
+		display: none !important;
+	}
+	body,
+	#quote-container {
+		background: #fff !important;
+		color: #000 !important;
+		height: auto !important;
+		width: auto !important;
+		padding: 2rem !important;
+		opacity: 1 !important;
+		transform: none !important;
+		filter: none !important;
 	}
 }
