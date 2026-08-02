@@ -42,6 +42,22 @@ class ThemeManager {
 		this.register(mod.default)
 	}
 
+	private getSavedTheme(): string | null {
+		try {
+			return localStorage.getItem('lastSelectedTheme')
+		} catch {
+			return null
+		}
+	}
+
+	private setSavedTheme(id: string) {
+		try {
+			localStorage.setItem('lastSelectedTheme', id)
+		} catch {
+			// Ignore quota or disabled storage errors
+		}
+	}
+
 	async initAll(onReady: () => void) {
 		if (this.isInitialized) return
 		this.isInitialized = true
@@ -49,7 +65,7 @@ class ThemeManager {
 		const bgContainer = document.getElementById('backgrounds-container')
 		if (bgContainer) bgContainer.innerHTML = ''
 
-		const savedThemeId = localStorage.getItem('lastSelectedTheme')
+		const savedThemeId = this.getSavedTheme()
 		let targetThemeId = savedThemeId
 		if (!this.availableThemes.includes(targetThemeId as string)) {
 			targetThemeId = 'twinkling-night'
@@ -104,7 +120,7 @@ class ThemeManager {
 		}
 
 		document.body.className = `theme-${activeTheme.id}`
-		localStorage.setItem('lastSelectedTheme', activeTheme.id)
+		this.setSavedTheme(activeTheme.id)
 		this.activeThemeId = activeTheme.id
 
 		// Activate the new theme
