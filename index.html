@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Muslim Luminaries - Quote Experience</title>
     <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://tahatariq19.github.io/MuslimLuminaries/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="description" content="A visually engaging website that displays inspirational quotes from Muslim scholars, thinkers, and philosophers.">
     <meta property="og:title" content="Muslim Luminaries - Quote Experience">
     <meta property="og:description" content="A visually engaging website that displays inspirational quotes from Muslim scholars, thinkers, and philosophers.">
@@ -16,11 +19,15 @@
     <meta name="twitter:image" content="https://tahatariq19.github.io/MuslimLuminaries/favicon.png">
     <meta name="twitter:description" content="A visually engaging website that displays inspirational quotes from Muslim scholars, thinkers, and philosophers.">
 
-    <!-- Global CSS (imported via src/main.ts) -->
-
-    <!-- Theme CSS (Lazy loaded via ThemeManager) -->
-
-    <!-- Fonts (Loaded individually via Theme CSS) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Muslim Luminaries",
+        "url": "https://tahatariq19.github.io/MuslimLuminaries/",
+        "description": "A visually engaging website that displays inspirational quotes from Muslim scholars, thinkers, and philosophers."
+    }
+    </script>
 </head>
 <body class="theme-twinkling-night">
     <a class="skip-link" href="#quote-container">Skip to content</a>
@@ -30,14 +37,14 @@
     <div id="backgrounds-container"></div>
 
     <!-- Actual Content -->
-    <div id="quote-container" role="main" aria-live="polite">
-        <div id="quote-text"></div>
-        <div id="quote-author"></div>
-    </div>
+    <main id="quote-container" tabindex="-1" aria-live="polite">
+        <blockquote id="quote-text"></blockquote>
+        <cite id="quote-author"></cite>
+    </main>
 
     <!-- Theme Toggle -->
     <button type="button" class="theme-toggle-btn" id="theme-btn" aria-label="Switch Theme">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
             <title>Theme Switching Palette Icon</title>
             <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
             <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
@@ -46,11 +53,9 @@
             <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path>
         </svg>
     </button>
-    <div class="theme-name-toast" id="theme-toast">Loading...</div>
+    <div class="theme-name-toast" id="theme-toast" role="status" aria-live="polite">Loading...</div>
 
     <!-- Engine -->
     <script type="module" src="/src/main.ts"></script>
-
-    <!-- Themes (Lazy loaded via ThemeManager) -->
 </body>
 </html>

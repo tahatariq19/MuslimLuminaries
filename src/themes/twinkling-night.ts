@@ -16,7 +16,14 @@ const theme: ThemeConfig = {
     `,
 	onActivate: () => {
 		if (t4Resize) window.addEventListener("resize", t4Resize)
-		if (t4Draw) t4AnimFrame = requestAnimationFrame(t4Draw)
+		if (t4Draw) {
+			const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+			if (!prefersReducedMotion) {
+				t4AnimFrame = requestAnimationFrame(t4Draw)
+			} else {
+				t4Draw(performance.now())
+			}
+		}
 	},
 	onDeactivate: () => {
 		if (t4Resize) window.removeEventListener("resize", t4Resize)
@@ -176,8 +183,11 @@ const theme: ThemeConfig = {
 				ctx.globalAlpha = 1
 			}
 
-			// t4Draw is guaranteed to be defined when this animation loop callback executes
-			t4AnimFrame = requestAnimationFrame(t4Draw!)
+			// Respect prefers-reduced-motion preference
+			const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+			if (!prefersReducedMotion && t4Draw) {
+				t4AnimFrame = requestAnimationFrame(t4Draw)
+			}
 		}
 	},
 }

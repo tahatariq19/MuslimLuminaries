@@ -91,7 +91,7 @@ class ThemeManager {
 		// Clean up the previously active theme
 		if (this.activeThemeId && this.activeThemeId !== activeTheme.id) {
 			const oldTheme = this.themes.find((t) => t.id === this.activeThemeId)
-			if (oldTheme && oldTheme.onDeactivate) {
+			if (oldTheme?.onDeactivate) {
 				oldTheme.onDeactivate()
 			}
 		}
