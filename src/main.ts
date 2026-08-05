@@ -1,12 +1,10 @@
 import { inject } from '@vercel/analytics'
-import { injectSpeedInsights } from '@vercel/speed-insights'
 import './style.css'
 import { quoteManager } from './quote-manager'
 import { quotes } from './quotes'
 import { themeManager } from './theme-manager'
 
 inject()
-injectSpeedInsights()
 
 quoteManager.init(quotes)
 
