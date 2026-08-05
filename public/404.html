@@ -3,24 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Muslim Luminaries - Page redirect">
+    <meta name="description" content="Muslim Luminaries - Page not found">
     <meta name="robots" content="noindex, follow">
-    <title>Muslim Luminaries - Redirecting...</title>
+    <title>Muslim Luminaries - Page Not Found</title>
     <script>
-        // GitHub Pages serves this for any 404 under the project. Redirect to
-        // the project root while preserving pathname, search params, and hash.
+        // Vercel serves this for any unmatched route. Redirect to the app root.
         (function () {
-            const l = window.location
-            const base = '/' + (l.pathname.split('/')[1] || '') + '/'
-            l.replace(base + l.search + l.hash)
+            if (window.location.pathname !== '/') {
+                window.location.replace('/' + window.location.search + window.location.hash)
+            }
         })()
     </script>
 </head>
 <body>
     <main>
         <h1>Page Not Found</h1>
-        <p>Redirecting to <a href="./">Muslim Luminaries</a>...</p>
+        <p>Redirecting to <a href="/">Muslim Luminaries</a>...</p>
     </main>
 </body>
 </html>
-
